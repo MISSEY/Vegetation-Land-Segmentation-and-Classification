@@ -1,0 +1,6 @@
+Data/
+outputs/
+.ipynb_checkpoints
+/__pycache__
+.idea
+.jpg

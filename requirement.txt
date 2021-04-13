@@ -1,0 +1,13 @@
+jupyterlab
+torch torchvision torchaudio
+scipy
+sklearn
+pandas
+geopandas
+geemap
+rasterio
+shapely
+earthengine-api
+pyyaml==5.1
+detectron2
+rioxarray
