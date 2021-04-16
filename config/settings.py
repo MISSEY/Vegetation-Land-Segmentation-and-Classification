@@ -15,7 +15,9 @@ def get_project_root()-> Path:
 check_point_output_directory = '/netscratch/smishra/output_400'
 
 
-data_directory = os.path.join(get_project_root(), 'Data')
+data_directory = os.path.join(get_project_root(), config._data_)
+
+raw_shape_directory = os.path.join(data_directory,config._raw_shape_directory)
 
 # mention the raw shape file name in the data directory
 shape_file = os.path.join(data_directory, config.__denmark_street_shape)

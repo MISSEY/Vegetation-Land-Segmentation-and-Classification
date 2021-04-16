@@ -4,6 +4,10 @@
 
 # Directories names
 _data_ = 'Data'
+
+# Below directories should be inside _data_ , otherwise give full path instead of names
+
+_raw_shape_directory = 'Raw_shape_files'
 _processed_root_directory_ = 'processed_data'
 _processed_denmark_root_ = 'processed_denmark_files'
 _version_ = 'v_3'
