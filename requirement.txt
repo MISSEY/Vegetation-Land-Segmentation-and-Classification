@@ -11,3 +11,4 @@ earthengine-api
 pyyaml==5.1
 detectron2
 rioxarray
+numpy
