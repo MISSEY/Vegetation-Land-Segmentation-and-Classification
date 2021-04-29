@@ -1,4 +1,4 @@
-# Vegetation-Land-Segmentaion-and-Classification
+# Vegetation-Land-Segmentation-and-Classification
 Master Thesis
 
 Goal :
