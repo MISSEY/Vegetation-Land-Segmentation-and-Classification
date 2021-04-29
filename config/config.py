@@ -14,7 +14,7 @@ _version_processed_shape_files = 'processed_shape_files'
 _processed_denmark_root_ = 'processed_denmark_files'
 
 # change version name while training
-_version_name ='v_Jan_March'
+_version_name ='v_Jan_Mar'
 
 _version_train_ = 'train'
 _version_validation_ = 'validation'
