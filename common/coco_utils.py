@@ -45,7 +45,7 @@ def train_test_split(chip_dfs: Dict, test_size=0.2, seed=1) -> Tuple[Dict, Dict]
 
     return train_chip_dfs, val_chip_dfs
 
-def format_coco(chip_dfs: Dict, chip_width: int, chip_height: int):
+def format_coco(chip_dfs: Dict, chip_width: int, chip_height: int,df):
     """Format train and test chip geometries to COCO json format.
 
     Args:
@@ -53,6 +53,7 @@ def format_coco(chip_dfs: Dict, chip_width: int, chip_height: int):
             geometries for that chip) pairs.
         chip_width: width of the chip in pixel size.
         chip_height: height of the chip in pixel size.
+        df: original geopandas dataframe which also include in chip_dfs
 
     COCOjson example structure and instructions below. For more detailed information on building a COCO
         dataset see http://www.immersivelimit.com/tutorials/create-coco-annotations-from-scratch
@@ -76,32 +77,25 @@ def format_coco(chip_dfs: Dict, chip_width: int, chip_height: int):
     - "id" in "categories" has to match "category_id" in "annotations".
     - "id" in "images" has to match "image_id" in "annotations".
     - "segmentation" in "annotations" is encoded in Run-Length-Encoding (except for crowd region (iscrowd=1)).
-    - "id" in "annotations has to be unique for each geometry, so 4370 geometries in 1000 chips > 4370 unique
+    - "id" in "annotations has to be unique for each geometry, so 4370 geometries in 1000 chips > 4370 uniques
        geometry ids. However, does not have to be unique between coco train and validation set.
     - "file_name" in "images" does officially not have to match the "image_id" in "annotations" but is strongly
        recommended.
     """
+
+    dict_id_category = get_categories(df)
+
     cocojson = {
         "info": {},
         "licenses": [],
-        'categories': [
-            {
-                'supercategory': 'Streets',
-                'id': 1,  # needs to match category_id.
-                'name': 'unsuitable_for_cars'
-            },
-            {
-                'supercategory': 'Streets',
-                'id': 2,  # needs to match category_id.
-                'name': 'very_small_roads'
-            },
-            {
-                'supercategory': 'Streets',
-                'id': 3,  # needs to match category_id.
-                'name': 'major_roads'
-            },
-        ]
     }
+    for key,value in dict_id_category.items():
+        categories = {
+            'supercategory': 'Agriculture',
+            'id': key,
+            'name':value
+        }
+        cocojson.setdefault('categories',[]).append(categories)
 
     annotation_id = 1
 
@@ -141,6 +135,18 @@ def format_coco(chip_dfs: Dict, chip_width: int, chip_height: int):
             annotation_id += 1
 
     return cocojson
+
+def get_categories(df):
+    """
+
+    :param df:
+    :return:
+    """
+    dict_id_category = {}
+    for i in range(len(df.groupby('r_code').groups)):
+        dict_id_category[int(df.groupby('r_code').get_group(i + 1).iloc[0]['r_code'])] = str(df.groupby('r_code').get_group(i + 1).iloc[0]['r_classes'])
+
+    return dict_id_category
 
 def coco_to_shapely(inpath_json: Union[Path, str],
                     categories: List[int] = None) -> Dict:

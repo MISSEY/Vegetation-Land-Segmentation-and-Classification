@@ -13,3 +13,5 @@ detectron2
 rioxarray
 numpy
 scikit-image
+descartes
+opencv-python
