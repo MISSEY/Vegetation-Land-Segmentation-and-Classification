@@ -25,7 +25,7 @@ import yaml
 
 def register_data_set():
     train_path = os.path.join(settings.data_directory_cluster, config._version_name,config._version_train_)
-    validation_path = os.path.join(settings.data_directory_cluster, config._version_name,config._version_train_)
+    validation_path = os.path.join(settings.data_directory_cluster, config._version_name,config._version_validation_)
     register_coco_instances("veg_train_dataset", {}, os.path.join(train_path, 'annotation', 'train2020.json'),
                             os.path.join(train_path, 'images'))
     register_coco_instances("veg_val_dataset", {}, os.path.join(validation_path, 'annotation', 'val2020.json'),
@@ -63,10 +63,10 @@ def setup():
     cfg.SOLVER.IMS_PER_BATCH = 2
     cfg.SOLVER.BASE_LR = 0.0001  # pick a good LR
     cfg.SOLVER.MAX_ITER = config.epochs
-    cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 1
+    cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 512
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = calculate_num_classes(config._version_name)
     cfg.DATALOADER.SAMPLER_TRAIN = 'RepeatFactorTrainingSampler'
-    cfg.SOLVER.STEPS = [10000,20000,30000,40000,50000,60000,70000,80000,90000,100000]
+    cfg.SOLVER.STEPS = [10000,20000,30000,40000,50000,60000,70000,80000,90000]
     # cfg.INPUT.MIN_SIZE_TRAIN = (800,)
     cfg.OUTPUT_DIR = settings.check_point_output_directory
 
