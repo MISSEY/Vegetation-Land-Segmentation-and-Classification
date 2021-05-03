@@ -13,7 +13,7 @@ underscore = '_'
 
 # while training on cluster
 
-check_point_output_directory = '/netscratch/smishra/thesis/output/output' + underscore + str(config.image_size) + underscore + str(
+check_point_output_directory = '/netscratch/smishra/thesis/output/output' + underscore + str(config.train_image_size) + underscore + str(
     config.model_name) + underscore + str(config._version_name)
 data_directory_cluster = '/netscratch/smishra/thesis/vegetation_dataset'
 
