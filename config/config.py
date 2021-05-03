@@ -10,8 +10,6 @@ _data_ = 'Data'
 _raw_shape_directory = 'Raw_shape_files'
 _preprocessed_denamark_shape_files_ = 'Preprocessed_denamark_shape_files'
 
-_version_processed_shape_files = 'processed_shape_files'
-_processed_denmark_root_ = 'processed_denmark_files'
 
 # change version name while training
 _version_name ='v_Jan_Mar'

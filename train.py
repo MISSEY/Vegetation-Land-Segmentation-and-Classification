@@ -24,8 +24,8 @@ import yaml
 
 
 def register_data_set():
-    train_path = os.path.join(settings.data_directory_cluster, config._version_name,config._version_train_)
-    validation_path = os.path.join(settings.data_directory_cluster, config._version_name,config._version_validation_)
+    train_path = os.path.join(settings.data_directory_cluster, config._version_name,config.image_size,config._version_train_)
+    validation_path = os.path.join(settings.data_directory_cluster, config._version_name,config.image_size,config._version_validation_)
     register_coco_instances("veg_train_dataset", {}, os.path.join(train_path, 'annotation', 'train2020.json'),
                             os.path.join(train_path, 'images'))
     register_coco_instances("veg_val_dataset", {}, os.path.join(validation_path, 'annotation', 'val2020.json'),
@@ -61,6 +61,7 @@ def setup():
         "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")  # Let training initialize from model zoo
     # cfg.MODEL.WEIGHTS = os.path.join(settings.weights_directory, "model_final.pth")
     cfg.SOLVER.IMS_PER_BATCH = 2
+    cfg.SOLVER.CHECKPOINT_PERIOD = config.epochs/2
     cfg.SOLVER.BASE_LR = 0.0001  # pick a good LR
     cfg.SOLVER.MAX_ITER = config.epochs
     cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 512
