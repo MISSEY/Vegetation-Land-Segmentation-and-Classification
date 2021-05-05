@@ -58,7 +58,7 @@ def setup():
     cfg.DATASETS.TEST = ("veg_val_dataset",)
     cfg.TEST.EVAL_PERIOD = 10000
     cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(
-        "COCO-InstanceSegmentation/mask_rcnn_R_101_FPN_3x.yaml")  # Let training initialize from model zoo
+        "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")  # Let training initialize from model zoo
     # cfg.MODEL.WEIGHTS = os.path.join(settings.weights_directory, "model_final.pth")
     cfg.SOLVER.IMS_PER_BATCH = 2
     cfg.SOLVER.CHECKPOINT_PERIOD = config.epochs/2
@@ -67,12 +67,14 @@ def setup():
     cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 512
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = calculate_num_classes(config._version_name)
     cfg.DATALOADER.SAMPLER_TRAIN = 'RepeatFactorTrainingSampler'
-    cfg.SOLVER.STEPS = [10000,20000,30000,40000,50000,60000,70000,80000,90000]
+    # cfg.SOLVER.STEPS = [10000,20000,30000,40000,50000,60000,70000,80000,90000]
     # cfg.INPUT.MIN_SIZE_TRAIN = (800,)
     cfg.OUTPUT_DIR = settings.check_point_output_directory
 
     if config.experiment_name == 'resampling_factor' :
         cfg.DATALOADER.REPEAT_THRESHOLD = config.experiment_value
+
+    cfg.DATALOADER.FILTER_EMPTY_ANNOTATIONS = False
 
     return cfg
 

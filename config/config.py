@@ -37,7 +37,7 @@ experiment_name = 'resampling_factor'
 experiment_value = 0.001  # from lvis paper
 
 # model
-model_name = 'R_101_FPN'
+model_name = 'R_50_FPN'
 
 
 
