@@ -71,6 +71,9 @@ def setup():
     # cfg.INPUT.MIN_SIZE_TRAIN = (800,)
     cfg.OUTPUT_DIR = settings.check_point_output_directory
 
+    if config.experiment_name == 'resampling_factor' :
+        cfg.DATALOADER.REPEAT_THRESHOLD = config.experiment_value
+
     return cfg
 
 
