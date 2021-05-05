@@ -56,7 +56,7 @@ def setup():
     cfg.DATASETS.TRAIN = ("veg_train_dataset",)
     # cfg.DATASETS.TRAIN = ("street_val_dataset",)
     cfg.DATASETS.TEST = ("veg_val_dataset",)
-    cfg.TEST.EVAL_PERIOD = 10000
+    cfg.TEST.EVAL_PERIOD = 100
     cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(
         "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")  # Let training initialize from model zoo
     # cfg.MODEL.WEIGHTS = os.path.join(settings.weights_directory, "model_final.pth")
@@ -74,7 +74,7 @@ def setup():
     if config.experiment_name == 'resampling_factor' :
         cfg.DATALOADER.REPEAT_THRESHOLD = config.experiment_value
 
-    cfg.DATALOADER.FILTER_EMPTY_ANNOTATIONS = False
+    # cfg.DATALOADER.FILTER_EMPTY_ANNOTATIONS = False
 
     return cfg
 
