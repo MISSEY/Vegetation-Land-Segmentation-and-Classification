@@ -247,7 +247,7 @@ def custom_mapper(dataset_dict):
 
     auginput = T.AugInput(image)
     transform = augs(auginput)
-    image = torch.from_numpy(auginput.image.transpose(2, 0, 1))
+    image = torch.as_tensor(image.transpose(2, 0, 1).astype("float32"))
     dataset_dict["image"] = image
 
     annos = [
