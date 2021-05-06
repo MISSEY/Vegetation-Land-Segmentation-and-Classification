@@ -62,12 +62,12 @@ def setup():
     # cfg.MODEL.WEIGHTS = os.path.join(settings.weights_directory, "model_final.pth")
     cfg.SOLVER.IMS_PER_BATCH = 2
     cfg.SOLVER.CHECKPOINT_PERIOD = 3000
-    cfg.SOLVER.BASE_LR = 0.01  # pick a good LR
+    cfg.SOLVER.BASE_LR = 0.001  # pick a good LR
     cfg.SOLVER.MAX_ITER = config.epochs
     cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 512
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = calculate_num_classes(config._version_name)
     cfg.DATALOADER.SAMPLER_TRAIN = 'RepeatFactorTrainingSampler'
-    cfg.SOLVER.STEPS = [1000,2000,3000,4000,5000,6000,7000,8000,9000]
+    cfg.SOLVER.STEPS = [10000,40000]
     # cfg.INPUT.MIN_SIZE_TRAIN = (800,)
     cfg.OUTPUT_DIR = settings.check_point_output_directory
 
