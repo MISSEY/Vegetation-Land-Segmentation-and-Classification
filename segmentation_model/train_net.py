@@ -1,20 +1,25 @@
-import detectron2.engine as engine
 import os
-from detectron2.evaluation import COCOEvaluator
 import time
 import torch
 import datetime
-from detectron2.utils.logger import log_every_n_seconds
 import logging
 import numpy as np
+import copy
+
+
+import detectron2.engine as engine
+from detectron2.utils.logger import log_every_n_seconds
+from detectron2.evaluation import COCOEvaluator
 import detectron2.utils.comm as comm
-from detectron2.data import build_detection_test_loader,DatasetMapper
+from detectron2.data import DatasetMapper,build_detection_test_loader, build_detection_train_loader
 from detectron2.layers import paste_masks_in_image
 from detectron2.structures import Instances
 from detectron2.utils.memory import retry_if_cuda_oom
 from detectron2.structures import ImageList, Instances
 from typing import Tuple, Dict
 from detectron2.modeling.backbone.build import build_backbone
+import detectron2.data.transforms as T
+from detectron2.data import detection_utils as utils
 
 BYTES_PER_FLOAT = 4
 # TODO: This memory limit may be too much or too little. It would be better to
@@ -228,10 +233,38 @@ class BasePredictor(engine.DefaultPredictor):
             return predictions[0]
 
 
+
+def custom_mapper(dataset_dict):
+    # Implement a mapper, similar to the default DatasetMapper, but with your own customizations
+    dataset_dict = copy.deepcopy(dataset_dict)  # it will be modified by code below
+    image = utils.read_image(dataset_dict["file_name"], format="BGR")
+    transform_list = [T.RandomBrightness(0.5, 2),
+                      T.RandomContrast(0.5, 2),
+                      T.RandomSaturation(0.5, 2),
+                      T.RandomFlip(prob=0.5, horizontal=False, vertical=True),
+                      T.RandomFlip(prob=0.5, horizontal=True, vertical=False),
+                      ]
+    image, transforms = T.apply_transform_gens(transform_list, image)
+    dataset_dict["image"] = torch.as_tensor(image.transpose(2, 0, 1).astype("float32"))
+
+    annos = [
+        utils.transform_instance_annotations(obj, transforms, image.shape[:2])
+        for obj in dataset_dict.pop("annotations")
+        if obj.get("iscrowd", 0) == 0
+    ]
+    instances = utils.annotations_to_instances(annos, image.shape[:2])
+    dataset_dict["instances"] = utils.filter_empty_instances(instances)
+    return dataset_dict
+
+
 class BaseTrainer(engine.DefaultTrainer):
 
     def __init__(self, cfg):
         super().__init__(cfg)
+
+    @classmethod
+    def build_train_loader(cls, cfg):
+        return build_detection_train_loader(cfg, mapper=custom_mapper)
 
     @classmethod
     def build_evaluator(cls, cfg, dataset_name, output_folder=None):
