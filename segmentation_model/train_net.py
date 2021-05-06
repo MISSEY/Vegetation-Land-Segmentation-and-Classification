@@ -22,7 +22,7 @@ import detectron2.data.transforms as T
 from detectron2.data import detection_utils as utils
 
 BYTES_PER_FLOAT = 4
-# TODO: This memory limit may be too much or too little. It would be better to
+
 # determine it based on available resources.
 GPU_MEM_LIMIT = 1024 ** 3  # 1 GB memory limit
 
