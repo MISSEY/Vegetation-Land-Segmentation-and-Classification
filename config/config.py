@@ -34,7 +34,7 @@ epochs = 10000
 # experiment
 
 experiment_name = 'resampling_factor'
-experiment_value = 1.01  # from lvis paper
+experiment_value = 0.001  # from lvis paper
 
 # model
 model_name = 'R_50_FPN'

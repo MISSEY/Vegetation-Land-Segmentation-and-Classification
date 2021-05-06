@@ -18,7 +18,7 @@ check_point_output_directory = '/netscratch/smishra/thesis/output/output' + unde
                                str(config.model_name) + underscore + \
                                str(config._version_name) + underscore + \
                                str(config.experiment_name) + str(config.experiment_value) + underscore + \
-                               str(4)
+                               str(5)
 data_directory_cluster = '/netscratch/smishra/thesis/vegetation_dataset'
 
 weights_directory = '/netscratch/smishra/output'

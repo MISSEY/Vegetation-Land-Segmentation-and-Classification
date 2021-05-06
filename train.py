@@ -56,12 +56,12 @@ def setup():
     cfg.DATASETS.TRAIN = ("veg_train_dataset",)
     # cfg.DATASETS.TRAIN = ("street_val_dataset",)
     cfg.DATASETS.TEST = ("veg_val_dataset",)
-    cfg.TEST.EVAL_PERIOD = 100
+    cfg.TEST.EVAL_PERIOD = 1000
     cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(
         "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")  # Let training initialize from model zoo
     # cfg.MODEL.WEIGHTS = os.path.join(settings.weights_directory, "model_final.pth")
     cfg.SOLVER.IMS_PER_BATCH = 2
-    cfg.SOLVER.CHECKPOINT_PERIOD = config.epochs/2
+    cfg.SOLVER.CHECKPOINT_PERIOD = 3000
     cfg.SOLVER.BASE_LR = 0.0001  # pick a good LR
     cfg.SOLVER.MAX_ITER = config.epochs
     cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 512
