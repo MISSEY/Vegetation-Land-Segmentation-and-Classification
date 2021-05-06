@@ -61,7 +61,7 @@ def setup():
         "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")  # Let training initialize from model zoo
     # cfg.MODEL.WEIGHTS = os.path.join(settings.weights_directory, "model_final.pth")
     cfg.SOLVER.IMS_PER_BATCH = 2
-    cfg.SOLVER.CHECKPOINT_PERIOD = 3000
+    cfg.SOLVER.CHECKPOINT_PERIOD = 50000
     cfg.SOLVER.BASE_LR = 0.001  # pick a good LR
     cfg.SOLVER.MAX_ITER = config.epochs
     cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 512
