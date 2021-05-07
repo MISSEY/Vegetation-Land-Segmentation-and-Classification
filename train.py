@@ -56,7 +56,7 @@ def setup():
     cfg.DATASETS.TRAIN = ("veg_train_dataset",)
     # cfg.DATASETS.TRAIN = ("street_val_dataset",)
     cfg.DATASETS.TEST = ("veg_val_dataset",)
-    cfg.TEST.EVAL_PERIOD = 1000
+    cfg.TEST.EVAL_PERIOD = 10000
     cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(
         "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")  # Let training initialize from model zoo
     # cfg.MODEL.WEIGHTS = os.path.join(settings.weights_directory, "model_final.pth")
@@ -67,7 +67,7 @@ def setup():
     cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 1024
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = calculate_num_classes(config._version_name)
     cfg.DATALOADER.SAMPLER_TRAIN = 'RepeatFactorTrainingSampler'
-    cfg.SOLVER.STEPS = [10000,40000]
+    cfg.SOLVER.STEPS = [10000,40000,100000]
     # cfg.INPUT.MIN_SIZE_TRAIN = (800,)
     cfg.OUTPUT_DIR = settings.check_point_output_directory
 
