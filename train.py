@@ -70,7 +70,7 @@ def setup():
     cfg.DATALOADER.SAMPLER_TRAIN = 'RepeatFactorTrainingSampler'
     cfg.SOLVER.STEPS = [10000,40000,80000]
     # cfg.INPUT.MIN_SIZE_TRAIN = (800,)
-    cfg.OUTPUT_DIR = settings.data_directory_cluster
+    cfg.OUTPUT_DIR = settings.check_point_output_directory
 
     # cfg.DATALOADER.NUM_WORKERS = 0 # for debug purposes
 
