@@ -29,12 +29,14 @@ instance_per_image_filter = 2000
 
 # Training
 
-epochs = 100000
+epochs = 200000
 
 # experiment
 
 experiment_name = 'resampling_factor'
 experiment_value = 0.001  # from lvis paper
+
+learning_rate = 0.00001
 
 # model
 model_name = 'R_50_FPN'

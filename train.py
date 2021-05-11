@@ -63,7 +63,7 @@ def setup():
     # cfg.MODEL.WEIGHTS = os.path.join(settings.weights_directory, "model_final.pth")
     cfg.SOLVER.IMS_PER_BATCH = 2
     cfg.SOLVER.CHECKPOINT_PERIOD = 25000
-    cfg.SOLVER.BASE_LR = 0.001  # pick a good LR
+    cfg.SOLVER.BASE_LR = config.learning_rate  # pick a good LR
     cfg.SOLVER.MAX_ITER = config.epochs
     cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 128
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = calculate_num_classes(config._version_name)
