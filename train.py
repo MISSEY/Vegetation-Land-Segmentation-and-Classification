@@ -65,7 +65,7 @@ def setup():
     cfg.SOLVER.CHECKPOINT_PERIOD = 25000
     cfg.SOLVER.BASE_LR = 0.001  # pick a good LR
     cfg.SOLVER.MAX_ITER = config.epochs
-    cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 1024
+    cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 512
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = calculate_num_classes(config._version_name)
     cfg.DATALOADER.SAMPLER_TRAIN = 'RepeatFactorTrainingSampler'
     cfg.SOLVER.STEPS = [10000,40000,80000]
