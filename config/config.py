@@ -29,7 +29,7 @@ instance_per_image_filter = 2000
 
 # Training
 
-epochs = 200000
+epochs = 4
 
 # experiment
 
