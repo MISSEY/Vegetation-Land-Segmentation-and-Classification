@@ -68,7 +68,7 @@ def setup():
     cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 128
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = calculate_num_classes(config._version_name)
     cfg.DATALOADER.SAMPLER_TRAIN = 'RepeatFactorTrainingSampler'
-    cfg.SOLVER.STEPS = [10000,40000,80000]
+    cfg.SOLVER.STEPS = (5000,)
     # cfg.INPUT.MIN_SIZE_TRAIN = (800,)
     cfg.OUTPUT_DIR = settings.check_point_output_directory
 
