@@ -22,14 +22,14 @@ _version_crop_images_ = 'cropped_images'
 # Image
 # Image configuration depend upon the data version above v_3 : 800 x 800, v_5 : 400 x 400, v_6 : 200 x 200
 
-train_image_size = 800
+train_image_size = 400
 test_image_size = 800
 
 instance_per_image_filter = 2000
 
 # Training
 
-epochs = 4
+epochs = 100000
 
 # experiment
 

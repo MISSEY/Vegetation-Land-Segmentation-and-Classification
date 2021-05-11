@@ -62,8 +62,6 @@ class Basehook(engine.HookBase):
                 )
             loss_batch = self._get_loss(inputs)
             losses.append(loss_batch)
-            print(losses)
-            print("loss_batch",loss_batch)
         mean_loss = np.mean(losses)
         self.trainer.storage.put_scalar('validation_loss', mean_loss)
         comm.synchronize()
