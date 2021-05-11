@@ -12,7 +12,7 @@ _preprocessed_denamark_shape_files_ = 'Preprocessed_denamark_shape_files'
 
 
 # change version name while training
-_version_name ='v_whole_summer_winter_2020'
+_version_name ='v_Jan_Mar'
 
 _version_train_ = 'train'
 _version_validation_ = 'validation'
