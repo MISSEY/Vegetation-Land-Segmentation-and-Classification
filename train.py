@@ -24,8 +24,8 @@ import yaml
 
 
 def register_data_set():
-    train_path = os.path.join(settings.data_directory, config._version_name,str(config.train_image_size),config._version_train_)
-    validation_path = os.path.join(settings.data_directory, config._version_name,str(config.train_image_size),config._version_validation_)
+    train_path = os.path.join(settings.data_directory_cluster, config._version_name,str(config.train_image_size),config._version_train_)
+    validation_path = os.path.join(settings.data_directory_cluster, config._version_name,str(config.train_image_size),config._version_validation_)
     register_coco_instances("veg_train_dataset", {}, os.path.join(train_path, 'annotation', 'train2020.json'),
                             os.path.join(train_path, 'images'))
     register_coco_instances("veg_val_dataset", {}, os.path.join(validation_path, 'annotation', 'val2020.json'),
@@ -70,8 +70,8 @@ def setup():
     cfg.DATALOADER.SAMPLER_TRAIN = 'RepeatFactorTrainingSampler'
     cfg.SOLVER.STEPS = (5000,)
     # cfg.INPUT.MIN_SIZE_TRAIN = (800,)
-    # cfg.OUTPUT_DIR = settings.check_point_output_directory
-    cfg.OUTPUT_DIR = settings.data_directory +'/output'
+    cfg.OUTPUT_DIR = settings.check_point_output_directory
+    # cfg.OUTPUT_DIR = settings.data_directory +'/output'
 
     # cfg.DATALOADER.NUM_WORKERS = 0 # for debug purposes
 
