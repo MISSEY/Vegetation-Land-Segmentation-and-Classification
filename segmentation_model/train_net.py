@@ -21,6 +21,8 @@ from detectron2.modeling.backbone.build import build_backbone
 import detectron2.data.transforms as T
 from detectron2.data import detection_utils as utils
 
+from config import config
+
 BYTES_PER_FLOAT = 4
 # TODO: This memory limit may be too much or too little. It would be better to
 # determine it based on available resources.
@@ -270,22 +272,24 @@ class BaseTrainer(engine.DefaultTrainer):
 
     @classmethod
     def build_evaluator(cls, cfg, dataset_name, output_folder=None):
-        if output_folder is None:
-            output_folder = os.path.join(cfg.OUTPUT_DIR, "inference")
-        return COCOEvaluator(dataset_name, cfg, True, output_folder)
+        if config.validation:
+            if output_folder is None:
+                output_folder = os.path.join(cfg.OUTPUT_DIR, "inference")
+            return COCOEvaluator(dataset_name, cfg, True, output_folder)
 
     def build_hooks(self):
         hooks = super().build_hooks()
 
-        hooks.insert(-1, Basehook(
-            self.cfg.TEST.EVAL_PERIOD,
-            self.model,
-            build_detection_test_loader(
-                self.cfg,
-                self.cfg.DATASETS.TEST[0],
-                DatasetMapper(self.cfg, True)
-            )
-        ))
-        return hooks
+        if(config.validation):
+            hooks.insert(-1, Basehook(
+                self.cfg.TEST.EVAL_PERIOD,
+                self.model,
+                build_detection_test_loader(
+                    self.cfg,
+                    self.cfg.DATASETS.TEST[0],
+                    DatasetMapper(self.cfg, True)
+                )
+            ))
+            return hooks
 
         return hooks

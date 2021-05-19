@@ -36,6 +36,8 @@ epochs = 100000
 experiment_name = 'merge_training'
 experiment_value = 0  # from lvis paper
 
+validation = False
+
 learning_rate = 0.001
 
 # model
