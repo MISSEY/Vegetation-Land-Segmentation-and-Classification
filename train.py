@@ -78,7 +78,7 @@ def setup():
     if config.experiment_name == 'resampling_factor' :
         cfg.DATALOADER.REPEAT_THRESHOLD = config.experiment_value
 
-    # cfg.DATALOADER.FILTER_EMPTY_ANNOTATIONS = False
+    cfg.DATALOADER.FILTER_EMPTY_ANNOTATIONS = False
 
     return cfg
 
