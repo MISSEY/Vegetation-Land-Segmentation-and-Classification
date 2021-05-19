@@ -14,8 +14,8 @@ _preprocessed_denamark_shape_files_ = 'Preprocessed_denamark_shape_files'
 # change version name while training
 _version_name ='v_whole_summer_winter_2020'
 
-_version_train_ = 'train_100'
-_version_validation_ = 'validation_0'
+_version_train_ = 'train'
+_version_validation_ = 'validation'
 _version_crop_images_ = 'cropped_images'
 
 
@@ -33,10 +33,10 @@ epochs = 100000
 
 # experiment
 
-experiment_name = 'merge_training'
+experiment_name = 'negative_sampling'
 experiment_value = 0  # from lvis paper
 
-validation = False
+validation = True
 
 learning_rate = 0.001
 
