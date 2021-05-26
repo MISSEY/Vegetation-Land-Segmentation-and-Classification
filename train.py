@@ -59,7 +59,7 @@ def setup():
     # cfg.DATASETS.TEST = ()
     cfg.TEST.EVAL_PERIOD = 1000
     cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(
-        "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")  # Let training initialize from model zoo
+        "COCO-InstanceSegmentation/mask_rcnn_R_50_DC5_3x.yaml")  # Let training initialize from model zoo
     # cfg.MODEL.WEIGHTS = os.path.join(settings.weights_directory, "model_final.pth")
     cfg.SOLVER.IMS_PER_BATCH = 2
     cfg.SOLVER.CHECKPOINT_PERIOD = 50000
@@ -78,7 +78,7 @@ def setup():
     if config.experiment_name == 'resampling_factor' :
         cfg.DATALOADER.REPEAT_THRESHOLD = config.experiment_value
 
-    cfg.DATALOADER.FILTER_EMPTY_ANNOTATIONS = False
+    # cfg.DATALOADER.FILTER_EMPTY_ANNOTATIONS = False
 
     return cfg
 
