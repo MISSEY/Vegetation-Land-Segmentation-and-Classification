@@ -263,8 +263,6 @@ def custom_mapper(dataset_dict):
 
 class BaseTrainer(engine.DefaultTrainer):
 
-    def __init__(self, cfg):
-        super().__init__(cfg)
 
     @classmethod
     def build_train_loader(cls, cfg):

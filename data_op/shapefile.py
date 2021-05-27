@@ -10,7 +10,7 @@ import geopandas as gpd
 from tqdm import tqdm
 import numpy as np
 from geopandas import GeoDataFrame as GDF
-from shapely.geometry import Polygon
+from shapely.geometry import Polygon, MultiPolygon
 
 class Shape_Extractor:
 
@@ -156,6 +156,30 @@ class Shape_Extractor:
 
         return df
 
+    def remove_gc(self,df):
+        """
+        Remove GeometryCollection and convert into Polygon
+        :param df:
+        :return: df
+        """
+        outdf = df[df.geom_type == 'Polygon']
+        type_ = np.unique(df.geom_type)
+        df_temp = gpd.GeoDataFrame(columns=outdf.columns)
+        i=0
+        if ("GeometryCollection" in type_):
+            row_idxs_gc = df.index[df.geometry.geom_type == 'GeometryCollection'].tolist()
+            for idx in row_idxs_gc:
+                for geom in df.loc[idx].geometry:
+                    if isinstance(geom,Polygon) or isinstance(geom,MultiPolygon):
+                        df_temp.append([df.loc[idx]] , ignore_index=True)
+                        df_temp.loc[i,'geometry'] =  geom
+
+            outdf = outdf.append(df_temp, ignore_index=True)
+            return outdf
+        else:
+            return df
+
+
     def keep_biggest_poly(self, df):
         """Replaces MultiPolygons or Mutlilines with the biggest polygon or lines contained in the MultiPolygon or Multilines."""
 
@@ -169,11 +193,13 @@ class Shape_Extractor:
             return df
         else:
             row_idxs_mp = df.index[df.geometry.geom_type == 'MultiPolygon'].tolist()
+
             for idx in row_idxs_mp:
                 mp = df.loc[idx].geometry
                 poly_areas = [p.area for p in mp]
                 max_area_poly = mp[poly_areas.index(max(poly_areas))]
                 df.loc[idx, 'geometry'] = max_area_poly
+
             return df
 
     def clip(self,df,clip_poly,keep_biggest_poly_: bool = False):
@@ -188,17 +214,19 @@ class Shape_Extractor:
         Returns:
             Result geodataframe.
         """
-
-        df = df[df.geometry.intersects(clip_poly)].copy()
+        # print(len(df))
+        # df= df[df.geometry.intersects(clip_poly)].copy()
+        # print(np.unique(df.geometry.type))
         # it creates Multiline or Multipolygon In order to rectify the Multiline or multipolygon, bigger one should
         # be chosen or new datapoint should be embedded
-        df.geometry = df.geometry.apply(lambda _p: _p.intersection(clip_poly))
-        # df = gpd.overlay(df, clip_poly, how='intersection')  # Slower.
+        # df.geometry = df.geometry.apply(lambda _p: _p.intersection(clip_poly))
+        df = gpd.clip(df,clip_poly)  # Slower.
 
         if(keep_biggest_poly_):
-            return self.keep_biggest_poly(df)
-        else:
-            return df
+            df = self.keep_biggest_poly(df)
+
+        df = self.remove_gc(df)
+        return df
 
     def save_shapes(self,df,output_file):
         """

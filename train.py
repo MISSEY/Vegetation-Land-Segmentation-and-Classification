@@ -24,8 +24,8 @@ import yaml
 
 
 def register_data_set():
-    train_path = os.path.join(settings.data_directory_cluster, config._version_name,str(config.train_image_size),config._version_train_)
-    validation_path = os.path.join(settings.data_directory_cluster, config._version_name,str(config.train_image_size),config._version_validation_)
+    train_path = os.path.join(settings.data_directory, config.year+'_processed', config._version_name,str(config.train_image_size),config._version_train_)
+    validation_path = os.path.join(settings.data_directory,config.year+'_processed', config._version_name,str(config.train_image_size),config._version_validation_)
     register_coco_instances("veg_train_dataset", {}, os.path.join(train_path, 'annotation', 'train2020.json'),
                             os.path.join(train_path, 'images'))
     register_coco_instances("veg_val_dataset", {}, os.path.join(validation_path, 'annotation', 'val2020.json'),
@@ -59,21 +59,21 @@ def setup():
     # cfg.DATASETS.TEST = ()
     cfg.TEST.EVAL_PERIOD = 1000
     cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(
-        "COCO-InstanceSegmentation/mask_rcnn_R_50_DC5_3x.yaml")  # Let training initialize from model zoo
+        "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")  # Let training initialize from model zoo
     # cfg.MODEL.WEIGHTS = os.path.join(settings.weights_directory, "model_final.pth")
     cfg.SOLVER.IMS_PER_BATCH = 2
     cfg.SOLVER.CHECKPOINT_PERIOD = 50000
     cfg.SOLVER.BASE_LR = config.learning_rate  # pick a good LR
     cfg.SOLVER.MAX_ITER = config.epochs
-    cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 128
+    cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 1
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = calculate_num_classes(config._version_name)
     cfg.DATALOADER.SAMPLER_TRAIN = 'RepeatFactorTrainingSampler'
     cfg.SOLVER.STEPS = (5000,)
     # cfg.INPUT.MIN_SIZE_TRAIN = (800,)
-    cfg.OUTPUT_DIR = settings.check_point_output_directory
-    # cfg.OUTPUT_DIR = settings.data_directory +'/output'
+    # cfg.OUTPUT_DIR = settings.check_point_output_directory
+    cfg.OUTPUT_DIR = settings.data_directory +'/output'
 
-    # cfg.DATALOADER.NUM_WORKERS = 0 # for debug purposes
+    cfg.DATALOADER.NUM_WORKERS = 0 # for debug purposes
 
     if config.experiment_name == 'resampling_factor' :
         cfg.DATALOADER.REPEAT_THRESHOLD = config.experiment_value
