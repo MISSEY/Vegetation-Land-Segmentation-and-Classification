@@ -2,6 +2,9 @@
 # Config definition
 # -----------------------------------------------------------------------------
 
+# debug
+debug = False
+
 # Directories names
 _data_ = 'Data'
 
@@ -12,7 +15,8 @@ _tif_ = 'Denmark_tif'
 
 
 # Year of data
-year = '2019'
+generate_year = '2019'
+train_year = '2020'
 
 # change version name while training
 _version_name ='v_Jan_Mar'
@@ -40,12 +44,15 @@ epochs = 100000
 experiment_name = 'resampling_factor'
 experiment_value = 0.001  # from lvis paper
 
+freeze_at = 0
+
 validation = True
 
 learning_rate = 0.001
 
 # model
-model_name = 'R_50_DC5'
+model_name = 'R_50_FPN'
+backbone_name ='build_resnet_fpn_backbone' # build_resnet_fpn_backbone (default) # build_resnet_backbone_custom
 
 # raster image
 crs = "EPSG:4326"

@@ -33,12 +33,14 @@ _preprocessed_denamark_shape_files_ = 'Preprocessed_denamark_shape_files'
 reformatted_file_path = os.path.join(st.raw_shape_directory, 'Reformatted', denmark_shape_directory)
 processed_file_path = os.path.join(st.data_directory, _preprocessed_denamark_shape_files_, denmark_shape_directory)
 
-year = cfg.year
+year = cfg.generate_year
 year_processed = year + '_processed'
 
 image_size = cfg.data_generation_image_size
 
 denmark_tif = os.path.join(st.data_directory, cfg._tif_, year)
+
+chip_name_prefix = 'COCO_train'+year+cfg._version_name+'_000000'
 
 
 def preprocess_shape_files():
@@ -152,7 +154,7 @@ def crop_vector_into_chips():
                                                       chip_width=image_size,
                                                       chip_height=image_size,
                                                       count=count,
-                                                      filename=filename,
+                                                      chipname=chip_name_prefix,
                                                       skip_partial_chips=True)
 
             # create directory for each version to save chip info which later used on croping raster image
@@ -206,7 +208,7 @@ def crop_raster_image():
             chip_dfsss = file_name_image_id_count_dictionary[filename]
             chip_windows = {}
             raster_image_max = 2200  # Value used while extracting the sentinel-2 image
-            path = os.path.join(version_path, str(image_size, cfg._version_crop_images_))
+            path = os.path.join(version_path, str(image_size), cfg._version_crop_images_)
             try:
                 os.makedirs(path)
             except OSError:
@@ -216,7 +218,7 @@ def crop_raster_image():
 
             # for each chip crop the raster image based on bounds and save it to directory
             for chip_no in chip_dfsss:
-                chip_name = f'COCO_train2021_000000{100000 + chip_no}'
+                chip_name = chip_name_prefix+f'{100000 + chip_no}'
                 chip_windows.update({chip_name: final_chip_dfs[chip_name]['chip_window']})
 
             # cut chips
@@ -233,7 +235,7 @@ def save_vectors_in_coco_annotations():
     """
 
     for directory in tqdm(os.listdir(denmark_tif)):
-        version_path = os.path.join(st.data_directory, 'v_' + str(directory))
+        version_path = os.path.join(st.data_directory, year_processed, 'v_' + directory)
         pickle_path = os.path.join(version_path, str(image_size), 'final_crop_chip_info', 'chip_dfs.pickle')
 
         # saved shape file
@@ -244,7 +246,7 @@ def save_vectors_in_coco_annotations():
         final_chip_dfs = dictionary_utils.load_pickle(pickle_path)
 
         # split into training and validation sets
-        train_chip_dfs, val_chip_dfs = coco_utils.train_test_split(final_chip_dfs, test_size=0, seed=1)
+        train_chip_dfs, val_chip_dfs = coco_utils.train_test_split(final_chip_dfs, test_size=20, seed=1)
 
         coco_train = coco_utils.format_coco(train_chip_dfs, image_size, image_size, denmark_veg)
         coco_val = coco_utils.format_coco(val_chip_dfs, image_size, image_size, denmark_veg)
@@ -263,8 +265,8 @@ def save_vectors_in_coco_annotations():
         else:
             print("Creation of the directory {0} and {1} Success".format(path_train, path_val))
 
-        dictionary_utils.new_json(outpath=os.path.join(path_train, 'annotation/train2020.json'), data=coco_train)
-        dictionary_utils.new_json(outpath=os.path.join(path_val, 'annotation/val2020.json'), data=coco_val)
+        dictionary_utils.new_json(outpath=os.path.join(path_train, 'annotation/train'+year+'.json'), data=coco_train)
+        dictionary_utils.new_json(outpath=os.path.join(path_val, 'annotation/val'+year+'.json'), data=coco_val)
 
         ## Split the images in train and validation
         # Split the cropped images into train and validation with the help of train_chip_dfs and val_chip_dfs
@@ -284,16 +286,26 @@ def save_vectors_in_coco_annotations():
 
 if __name__ == '__main__':
     # 1. preprocess
+    print("Preprocessing")
     # preprocess_shape_files()
+    print("Finish Preprocessing")
 
+    print("Clipping on raster bounds")
     # 2. clip shape on raster bounds
     clip_shape_on_raster_bounds()
+    print("finish Clipping on raster bounds")
 
+    print("Vector crop")
     # 3. crop the vectors of defined image size
     crop_vector_into_chips()
+    print("Finish Vector crop")
 
+    print("Raster image crop")
     # 4. crop raster of defined image size
     crop_raster_image()
+    print("Finish Raster image crop")
 
+    print("Annotations")
     # 5. split validation and training set and save into coco data format
     save_vectors_in_coco_annotations()
+    print("Finish annotations")

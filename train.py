@@ -24,11 +24,20 @@ import yaml
 
 
 def register_data_set():
-    train_path = os.path.join(settings.data_directory, config.year+'_processed', config._version_name,str(config.train_image_size),config._version_train_)
-    validation_path = os.path.join(settings.data_directory,config.year+'_processed', config._version_name,str(config.train_image_size),config._version_validation_)
-    register_coco_instances("veg_train_dataset", {}, os.path.join(train_path, 'annotation', 'train2020.json'),
+    if(config.debug):
+
+        train_path = os.path.join(settings.data_directory, config.train_year + '_processed', config._version_name,
+                                  str(config.train_image_size), config._version_train_)
+        validation_path = os.path.join(settings.data_directory, config.train_year + '_processed', config._version_name,
+                                       str(config.train_image_size), config._version_validation_)
+    else:
+        train_path = os.path.join(settings.data_directory_cluster, config.train_year + '_processed', config._version_name,
+                                  str(config.train_image_size), config._version_train_)
+        validation_path = os.path.join(settings.data_directory_cluster, config.train_year + '_processed', config._version_name,
+                                       str(config.train_image_size), config._version_validation_)
+    register_coco_instances("veg_train_dataset", {}, os.path.join(train_path, 'annotation', 'train'+config.train_year+'.json'),
                             os.path.join(train_path, 'images'))
-    register_coco_instances("veg_val_dataset", {}, os.path.join(validation_path, 'annotation', 'val2020.json'),
+    register_coco_instances("veg_val_dataset", {}, os.path.join(validation_path, 'annotation', 'val'+config.train_year+'.json'),
                             os.path.join(validation_path, 'images'))
 
 def calculate_num_classes(version_name):
@@ -70,10 +79,13 @@ def setup():
     cfg.DATALOADER.SAMPLER_TRAIN = 'RepeatFactorTrainingSampler'
     cfg.SOLVER.STEPS = (5000,)
     # cfg.INPUT.MIN_SIZE_TRAIN = (800,)
-    # cfg.OUTPUT_DIR = settings.check_point_output_directory
-    cfg.OUTPUT_DIR = settings.data_directory +'/output'
 
-    cfg.DATALOADER.NUM_WORKERS = 0 # for debug purposes
+
+    if config.debug:
+        cfg.DATALOADER.NUM_WORKERS = 0 # for debug purposes
+        cfg.OUTPUT_DIR = settings.data_directory + '/output'
+    else:
+        cfg.OUTPUT_DIR = settings.check_point_output_directory
 
     if config.experiment_name == 'resampling_factor' :
         cfg.DATALOADER.REPEAT_THRESHOLD = config.experiment_value

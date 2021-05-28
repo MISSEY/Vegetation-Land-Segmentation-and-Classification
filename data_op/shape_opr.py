@@ -107,7 +107,7 @@ def invert_y_axis(ingeo: Union[Polygon, GDF],
         return ingeo
 
 
-def crop_vector_in_chips(df, raster_width, raster_height, raster_transform, chip_width, chip_height, count, filename,
+def crop_vector_in_chips(df, raster_width, raster_height, raster_transform, chip_width, chip_height, count, chipname,
                          skip_partial_chips):
     """
 
@@ -138,7 +138,7 @@ def crop_vector_in_chips(df, raster_width, raster_height, raster_transform, chip
                                  nrows=chip_height)
         chip_df = invert_y_axis(chip_df, reference_height=chip_height)
 
-        chip_name = f'COCO_train2021_000000{100000 + count}'  # _{clip_minX}_{clip_minY}_{clip_maxX}_{clip_maxY}'
+        chip_name = chipname+f'{100000 + count}'  # _{clip_minX}_{clip_minY}_{clip_maxX}_{clip_maxY}'
 
         all_chip_dfs[chip_name] = {'chip_df': chip_df,
                                    'chip_window': chip_window,

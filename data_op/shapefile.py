@@ -215,12 +215,12 @@ class Shape_Extractor:
             Result geodataframe.
         """
         # print(len(df))
-        # df= df[df.geometry.intersects(clip_poly)].copy()
+        df= df[df.geometry.intersects(clip_poly)].copy()
         # print(np.unique(df.geometry.type))
         # it creates Multiline or Multipolygon In order to rectify the Multiline or multipolygon, bigger one should
         # be chosen or new datapoint should be embedded
-        # df.geometry = df.geometry.apply(lambda _p: _p.intersection(clip_poly))
-        df = gpd.clip(df,clip_poly)  # Slower.
+        df.geometry = df.geometry.apply(lambda _p: _p.intersection(clip_poly))
+        # df = gpd.clip(df,clip_poly)  # Slower.
 
         if(keep_biggest_poly_):
             df = self.keep_biggest_poly(df)
