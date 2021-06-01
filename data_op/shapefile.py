@@ -220,7 +220,10 @@ class Shape_Extractor:
         # it creates Multiline or Multipolygon In order to rectify the Multiline or multipolygon, bigger one should
         # be chosen or new datapoint should be embedded
         df.geometry = df.geometry.apply(lambda _p: _p.intersection(clip_poly))
-        # df = gpd.clip(df,clip_poly)  # Slower.
+        # df = gpd.clip(df,clip_poly)  #
+        if (df['r_code'] is None):
+            # none_values = none_values + 1
+            print(True)
 
         if(keep_biggest_poly_):
             df = self.keep_biggest_poly(df)

@@ -18,8 +18,9 @@ _tif_ = 'Denmark_tif'
 generate_year = '2019'
 train_year = '2020'
 
+
 # change version name while training
-_version_name ='v_Jan_Mar'
+_version_name ='v_whole_summer_winter_2020'
 
 _version_processed_shape_files = 'processed_shape_files' # Each version has unique files depending on category. ,
 # It must be inside version name
@@ -33,8 +34,7 @@ _version_crop_images_ = 'cropped_images'
 # Image configuration depend upon the data version above v_3 : 800 x 800, v_5 : 400 x 400, v_6 : 200 x 200
 
 data_generation_image_size = 800
-train_image_size = 400
-test_image_size = 400
+train_image_size = 800
 instance_per_image_filter = 2000
 
 # Training
@@ -48,7 +48,7 @@ freeze_at = 0
 
 validation = True
 
-learning_rate = 0.001
+learning_rate = 0.00025
 
 # model
 model_name = 'R_50_FPN'
@@ -58,7 +58,10 @@ backbone_name ='build_resnet_fpn_backbone' # build_resnet_fpn_backbone (default)
 crs = "EPSG:4326"
 
 # testing
-_test_version_name = 'v_Jan_Mar'
-_test__model_ = 'output_400_R_50_FPN_v_Apr_Jun_merge_training0_0.001_33'
+_test_version_name = 'v_whole_summer_winter_2020'
+_test__model_ = 'output_800_R_50_FPN_v_whole_summer_winter_2020_resampling_factor0.001_0.001_freeze_at0_54'
+_test_output_image_path = 'output_image'
+test_year = '2020'
+test_image_size = 800
 
 

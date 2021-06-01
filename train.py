@@ -80,6 +80,9 @@ def setup():
     cfg.SOLVER.STEPS = (5000,)
     # cfg.INPUT.MIN_SIZE_TRAIN = (800,)
 
+    cfg.MODEL.BACKBONE.NAME = config.backbone_name
+    cfg.MODEL.BACKBONE.FREEZE_AT = config.freeze_at
+
 
     if config.debug:
         cfg.DATALOADER.NUM_WORKERS = 0 # for debug purposes

@@ -98,13 +98,13 @@ def format_coco(chip_dfs: Dict, chip_width: int, chip_height: int,df):
         cocojson.setdefault('categories',[]).append(categories)
 
     annotation_id = 1
-
+    none_values = 0
     for chip_name in chip_dfs.keys():
-
+        chip__name_split = chip_name.split('_')
         if 'train' in chip_name:
-            chip_id = int(chip_name[21:])
+            chip_id = int(chip__name_split[-1])
         elif 'val' in chip_name:
-            chip_id = int(chip_name[19:])
+            chip_id = int(chip__name_split[-1])
 
         image = {"file_name": f'{chip_name}.jpg',
                   "id": int(chip_id),
@@ -122,17 +122,22 @@ def format_coco(chip_dfs: Dict, chip_width: int, chip_height: int,df):
             bounds = row.geometry.bounds  # COCO bbox
             coco_bbox = [bounds[0], bounds[1], bounds[2] - bounds[0], bounds[3] - bounds[1]]
             coco_bbox = [round(coords, 2) for coords in coco_bbox]
-            annotation = {"id": annotation_id,
-                           "image_id": int(chip_id),
-                           "category_id": int(row['r_code']),  # with multiple classes use "category_id" : row.reclass_id
-                           "mycategory_name": row['r_classes'],
-                           "bbox": coco_bbox,
-                           "area": row.geometry.area,
-                           "iscrowd": 0,
-                           "segmentation": [coco_xy]}
-            cocojson.setdefault('annotations', []).append(annotation)
+            if(row['r_code'] is None):
+                none_values = none_values + 1
+                print(none_values)
+            else:
+                annotation = {"id": annotation_id,
+                               "image_id": int(chip_id),
+                               "category_id": int(row['r_code']),  # with multiple classes use "category_id" : row.reclass_id
+                               "mycategory_name": row['r_classes'],
+                               "bbox": coco_bbox,
+                               "area": row.geometry.area,
+                               "iscrowd": 0,
+                               "segmentation": [coco_xy]}
+                cocojson.setdefault('annotations', []).append(annotation)
 
-            annotation_id += 1
+                annotation_id += 1
+
 
     return cocojson
 
