@@ -32,9 +32,9 @@ def register_data_set():
         validation_path = os.path.join(settings.data_directory, config.train_year + '_processed', config._version_name,
                                        str(config.train_image_size), config._version_validation_)
     else:
-        train_path = os.path.join(settings.data_directory_cluster, config._version_, config.train_year + '_processed',
+        train_path = os.path.join(settings.data_directory_cluster, str(config._version_), config.train_year + '_processed',
                                   config._version_name, str(config.train_image_size), config._version_train_)
-        validation_path = os.path.join(settings.data_directory_cluster, config._version_, config.train_year + '_processed',
+        validation_path = os.path.join(settings.data_directory_cluster, str(config._version_), config.train_year + '_processed',
                                        config._version_name, str(config.train_image_size), config._version_validation_)
     register_coco_instances("veg_train_dataset", {},
                             os.path.join(train_path, 'annotation', 'train' + config.train_year + '.json'),
