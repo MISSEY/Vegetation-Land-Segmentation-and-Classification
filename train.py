@@ -81,7 +81,7 @@ def setup():
 
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = calculate_num_classes(config._version_name)
     cfg.DATALOADER.SAMPLER_TRAIN = 'RepeatFactorTrainingSampler'
-    cfg.SOLVER.STEPS = (1000,)
+    cfg.SOLVER.STEPS = config.solver_steps
     # cfg.INPUT.MIN_SIZE_TRAIN = (800,)
 
     cfg.MODEL.BACKBONE.NAME = config.backbone_name

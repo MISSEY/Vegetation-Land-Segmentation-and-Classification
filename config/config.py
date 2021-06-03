@@ -11,7 +11,7 @@ _data_ = 'Data'
 # Below directories should be inside _data_ , otherwise give full path instead of names
 _raw_shape_directory = 'Raw_shape_files'
 _tif_ = 'Denmark_tif'
-_version_ = 1
+_version_ = 2
 
 
 # train
@@ -29,7 +29,7 @@ instance_per_image_filter = 2000
 epochs = 10000
 experiment_name = 'resampling_factor'
 experiment_value = 0.001  # from lvis paper
-freeze_at = 0
+freeze_at = 2
 validation = True
 learning_rate = 0.001
 # model
@@ -37,9 +37,10 @@ model_name = 'R_50_FPN'
 backbone_name ='build_resnet_fpn_backbone' # build_resnet_fpn_backbone (default) # build_resnet_backbone_custom
 
 batch_size = 256
-experiment_number = 58
+experiment_number = 59
 checkpoint_period = 5000
 eval_period = 1000
+solver_steps = (2000,)
 
 # raster image
 crs = "EPSG:4326"
