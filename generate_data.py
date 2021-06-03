@@ -40,7 +40,18 @@ image_size = cfg.data_generation_image_size
 
 denmark_tif = os.path.join(st.data_directory, cfg._tif_, year)
 
-
+def create_directory(path):
+    """
+    Create directories if not found
+    :param path:
+    :return:
+    """
+    try:
+        os.makedirs(path)
+    except OSError:
+        print("Creation of the directory %s failed" % path)
+    else:
+        print("Creation of the directory %s Success" % path)
 
 
 def preprocess_shape_files():
@@ -48,6 +59,8 @@ def preprocess_shape_files():
     Preprocess each shape files for different categories and save it to processed file directory for further processing
     :return: None
     """
+    create_directory(processed_file_path)
+
     # For year shape files
     for file in tqdm(os.listdir(reformatted_file_path)):
         file_type, filename = file.split('.')[1], file.split('.')[0]
@@ -290,14 +303,14 @@ def save_vectors_in_coco_annotations():
 
 if __name__ == '__main__':
     # 1. preprocess
-    print("Preprocessing")
+    # print("Preprocessing")
     # preprocess_shape_files()
-    print("Finish Preprocessing")
-
-    print("Clipping on raster bounds")
-    # 2. clip shape on raster bounds
-    clip_shape_on_raster_bounds()
-    print("finish Clipping on raster bounds")
+    # print("Finish Preprocessing")
+    #
+    # print("Clipping on raster bounds")
+    # # 2. clip shape on raster bounds
+    # clip_shape_on_raster_bounds()
+    # print("finish Clipping on raster bounds")
 
     print("Vector crop")
     # 3. crop the vectors of defined image size

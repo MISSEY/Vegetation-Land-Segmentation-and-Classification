@@ -19,26 +19,30 @@ from detectron2.data.datasets import register_coco_instances
 
 from detectron2.engine import default_argument_parser, default_setup, launch
 from segmentation_model.train_net import BaseTrainer as bt
+from backbone import resnet
 
 import yaml
 
 
 def register_data_set():
-    if(config.debug):
+    if (config.debug):
 
         train_path = os.path.join(settings.data_directory, config.train_year + '_processed', config._version_name,
                                   str(config.train_image_size), config._version_train_)
         validation_path = os.path.join(settings.data_directory, config.train_year + '_processed', config._version_name,
                                        str(config.train_image_size), config._version_validation_)
     else:
-        train_path = os.path.join(settings.data_directory_cluster, config.train_year + '_processed', config._version_name,
-                                  str(config.train_image_size), config._version_train_)
-        validation_path = os.path.join(settings.data_directory_cluster, config.train_year + '_processed', config._version_name,
-                                       str(config.train_image_size), config._version_validation_)
-    register_coco_instances("veg_train_dataset", {}, os.path.join(train_path, 'annotation', 'train'+config.train_year+'.json'),
+        train_path = os.path.join(settings.data_directory_cluster, config._version_, config.train_year + '_processed',
+                                  config._version_name, str(config.train_image_size), config._version_train_)
+        validation_path = os.path.join(settings.data_directory_cluster, config._version_, config.train_year + '_processed',
+                                       config._version_name, str(config.train_image_size), config._version_validation_)
+    register_coco_instances("veg_train_dataset", {},
+                            os.path.join(train_path, 'annotation', 'train' + config.train_year + '.json'),
                             os.path.join(train_path, 'images'))
-    register_coco_instances("veg_val_dataset", {}, os.path.join(validation_path, 'annotation', 'val'+config.train_year+'.json'),
+    register_coco_instances("veg_val_dataset", {},
+                            os.path.join(validation_path, 'annotation', 'val' + config.train_year + '.json'),
                             os.path.join(validation_path, 'images'))
+
 
 def calculate_num_classes(version_name):
     if version_name == 'v_Jan_Mar':
@@ -51,6 +55,7 @@ def calculate_num_classes(version_name):
         return 6
     else:
         return 2
+
 
 def setup():
     """
@@ -82,9 +87,8 @@ def setup():
     cfg.MODEL.BACKBONE.NAME = config.backbone_name
     cfg.MODEL.BACKBONE.FREEZE_AT = config.freeze_at
 
-
     if config.debug:
-        cfg.DATALOADER.NUM_WORKERS = 0 # for debug purposes
+        cfg.DATALOADER.NUM_WORKERS = 0  # for debug purposes
         cfg.OUTPUT_DIR = settings.data_directory + '/output'
         cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 1
         cfg.SOLVER.IMS_PER_BATCH = 1
@@ -93,7 +97,7 @@ def setup():
         cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = config.batch_size
         cfg.SOLVER.IMS_PER_BATCH = 2
 
-    if config.experiment_name == 'resampling_factor' :
+    if config.experiment_name == 'resampling_factor':
         cfg.DATALOADER.REPEAT_THRESHOLD = config.experiment_value
 
     # cfg.DATALOADER.FILTER_EMPTY_ANNOTATIONS = False
@@ -114,8 +118,6 @@ def main():
     trainer = bt(cfg)
     trainer.resume_or_load(resume=False)
     trainer.train()
-
-
 
 
 if __name__ == "__main__":

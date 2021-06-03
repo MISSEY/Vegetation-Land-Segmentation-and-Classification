@@ -9,9 +9,9 @@ debug = False
 _data_ = 'Data'
 
 # Below directories should be inside _data_ , otherwise give full path instead of names
-
 _raw_shape_directory = 'Raw_shape_files'
 _tif_ = 'Denmark_tif'
+_version_ = 1
 
 
 # train
@@ -23,21 +23,21 @@ _version_processed_shape_files = 'processed_shape_files' # Each version has uniq
 _version_train_ = 'train'
 _version_validation_ = 'validation'
 _version_crop_images_ = 'cropped_images'
-train_image_size = 800
+train_image_size = 896
 instance_per_image_filter = 2000
 
 epochs = 10000
 experiment_name = 'resampling_factor'
-experiment_value = 0.01  # from lvis paper
-freeze_at = 2
+experiment_value = 0.001  # from lvis paper
+freeze_at = 0
 validation = True
 learning_rate = 0.001
 # model
 model_name = 'R_50_FPN'
-backbone_name ='build_resnet_fpn_backbone' # build_resnet_fpn_backbone (default) # build_resnet_backbone_custom
+backbone_name ='build_resnet_backbone_custom' # build_resnet_fpn_backbone (default) # build_resnet_backbone_custom
 
 batch_size = 256
-experiment_number = 56
+experiment_number = 57
 checkpoint_period = 5000
 eval_period = 1000
 
@@ -53,7 +53,7 @@ test_image_size = 800
 
 # generate data
 generate_year = '2020'
-data_generation_image_size = 128
+data_generation_image_size = 224
 denmark_shape_directory = 'Denmark_shape_2020'
 _preprocessed_denamark_shape_files_ = 'Preprocessed_denamark_shape_files'
 
