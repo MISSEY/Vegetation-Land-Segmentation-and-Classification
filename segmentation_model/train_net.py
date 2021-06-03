@@ -22,6 +22,7 @@ import detectron2.data.transforms as T
 from detectron2.data import detection_utils as utils
 
 from config import config
+from PIL import Image
 
 BYTES_PER_FLOAT = 4
 
@@ -240,16 +241,17 @@ def custom_mapper(dataset_dict):
     dataset_dict = copy.deepcopy(dataset_dict)  # it will be modified by code below
     image = utils.read_image(dataset_dict["file_name"], format="BGR")
     augs = T.AugmentationList([
-        T.RandomBrightness(0.5, 2),
-        T.RandomContrast(0.5, 2),
-        T.RandomSaturation(0.5, 2),
+        T.Resize((224,224),interp=Image.LANCZOS),
+        # T.RandomBrightness(0.5, 2),
+        # T.RandomContrast(0.5, 2),
+        # T.RandomSaturation(0.5, 2),
         T.RandomFlip(prob=0.5, horizontal=False, vertical=True),
         T.RandomFlip(prob=0.5, horizontal=True, vertical=False)
     ])
 
     auginput = T.AugInput(image)
     transform = augs(auginput)
-    image = torch.as_tensor(image.transpose(2, 0, 1).astype("float32"))
+    image = torch.as_tensor(auginput.image.transpose(2, 0, 1).astype("float32"))
     dataset_dict["image"] = image
 
     annos = [

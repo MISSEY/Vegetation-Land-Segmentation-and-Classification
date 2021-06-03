@@ -24,8 +24,8 @@ import data_op.shape_opr as so
 from config import config as cfg
 
 # Global variables
-denmark_shape_directory = 'Denmark_shape_2019'
-_preprocessed_denamark_shape_files_ = 'Preprocessed_denamark_shape_files'
+denmark_shape_directory = cfg.denmark_shape_directory
+_preprocessed_denamark_shape_files_ = cfg._preprocessed_denamark_shape_files_
 
 # File path where vector shape files for each categories are saved after filtering
 # Please see Preprocessing.ipynb for categorisation.
@@ -40,7 +40,7 @@ image_size = cfg.data_generation_image_size
 
 denmark_tif = os.path.join(st.data_directory, cfg._tif_, year)
 
-chip_name_prefix = 'COCO_train'+year+cfg._version_name+'_000000'
+
 
 
 def preprocess_shape_files():
@@ -146,6 +146,8 @@ def crop_vector_into_chips():
             denmark_veg = shape_ex.import_shape()
             prev = count
 
+            chip_name_prefix = 'COCO_train' + year + '_' + directory + '_000000'
+
             # crop the vector on raster height and width of defing image sixe and save the information into pickle
             chip_dfs, count = so.crop_vector_in_chips(df=denmark_veg,
                                                       raster_width=raster_meta['width'],
@@ -216,6 +218,8 @@ def crop_raster_image():
             else:
                 print("Creation of the directory %s Success" % path)
 
+            chip_name_prefix = 'COCO_train' + year + '_' + directory + '_000000'
+
             # for each chip crop the raster image based on bounds and save it to directory
             for chip_no in chip_dfsss:
                 chip_name = chip_name_prefix+f'{100000 + chip_no}'
@@ -246,7 +250,7 @@ def save_vectors_in_coco_annotations():
         final_chip_dfs = dictionary_utils.load_pickle(pickle_path)
 
         # split into training and validation sets
-        train_chip_dfs, val_chip_dfs = coco_utils.train_test_split(final_chip_dfs, test_size=20, seed=1)
+        train_chip_dfs, val_chip_dfs = coco_utils.train_test_split(final_chip_dfs, test_size=0.2, seed=1)
 
         coco_train = coco_utils.format_coco(train_chip_dfs, image_size, image_size, denmark_veg)
         coco_val = coco_utils.format_coco(val_chip_dfs, image_size, image_size, denmark_veg)

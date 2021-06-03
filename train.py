@@ -70,11 +70,10 @@ def setup():
     cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(
         "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")  # Let training initialize from model zoo
     # cfg.MODEL.WEIGHTS = os.path.join(settings.weights_directory, "model_final.pth")
-    cfg.SOLVER.IMS_PER_BATCH = 2
     cfg.SOLVER.CHECKPOINT_PERIOD = 50000
     cfg.SOLVER.BASE_LR = config.learning_rate  # pick a good LR
     cfg.SOLVER.MAX_ITER = config.epochs
-    cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 1
+
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = calculate_num_classes(config._version_name)
     cfg.DATALOADER.SAMPLER_TRAIN = 'RepeatFactorTrainingSampler'
     cfg.SOLVER.STEPS = (5000,)
@@ -87,8 +86,12 @@ def setup():
     if config.debug:
         cfg.DATALOADER.NUM_WORKERS = 0 # for debug purposes
         cfg.OUTPUT_DIR = settings.data_directory + '/output'
+        cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 1
+        cfg.SOLVER.IMS_PER_BATCH = 1
     else:
         cfg.OUTPUT_DIR = settings.check_point_output_directory
+        cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = config.batch_size
+        cfg.SOLVER.IMS_PER_BATCH = 2
 
     if config.experiment_name == 'resampling_factor' :
         cfg.DATALOADER.REPEAT_THRESHOLD = config.experiment_value
