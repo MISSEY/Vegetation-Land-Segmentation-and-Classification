@@ -28,16 +28,16 @@ instance_per_image_filter = 2000
 
 epochs = 10000
 experiment_name = 'resampling_factor'
-experiment_value = 0.001  # from lvis paper
-freeze_at = 0
+experiment_value = 0.01  # from lvis paper
+freeze_at = 2
 validation = True
-learning_rate = 0.00025
+learning_rate = 0.001
 # model
 model_name = 'R_50_FPN'
 backbone_name ='build_resnet_fpn_backbone' # build_resnet_fpn_backbone (default) # build_resnet_backbone_custom
 
 batch_size = 256
-experiment_number = 55
+experiment_number = 56
 checkpoint_period = 5000
 eval_period = 1000
 
