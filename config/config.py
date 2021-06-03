@@ -34,10 +34,10 @@ validation = True
 learning_rate = 0.001
 # model
 model_name = 'R_50_FPN'
-backbone_name ='build_resnet_backbone_custom' # build_resnet_fpn_backbone (default) # build_resnet_backbone_custom
+backbone_name ='build_resnet_fpn_backbone' # build_resnet_fpn_backbone (default) # build_resnet_backbone_custom
 
 batch_size = 256
-experiment_number = 57
+experiment_number = 58
 checkpoint_period = 5000
 eval_period = 1000
 
