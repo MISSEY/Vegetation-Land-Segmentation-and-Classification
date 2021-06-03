@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------------
 
 # debug
-debug = True
+debug = False
 
 # Directories names
 _data_ = 'Data'
@@ -26,7 +26,7 @@ _version_crop_images_ = 'cropped_images'
 train_image_size = 800
 instance_per_image_filter = 2000
 
-epochs = 100000
+epochs = 10000
 experiment_name = 'resampling_factor'
 experiment_value = 0.001  # from lvis paper
 freeze_at = 0
@@ -37,6 +37,9 @@ model_name = 'R_50_FPN'
 backbone_name ='build_resnet_fpn_backbone' # build_resnet_fpn_backbone (default) # build_resnet_backbone_custom
 
 batch_size = 128
+experiment_number = 55
+checkpoint_period = 5000
+eval_period = 1000
 
 # raster image
 crs = "EPSG:4326"
