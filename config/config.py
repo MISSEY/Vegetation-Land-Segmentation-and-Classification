@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------------
 
 # debug
-debug = True
+debug = False
 
 # Directories names
 _data_ = 'Data'
@@ -25,20 +25,20 @@ train_config = {
     # change version name while training
     'train_image_size' : 896,
     'instance_per_image_filter' : 2000,
-    "epochs" : 4,
+    "epochs" : 10000,
     "experiment_name" : 'resampling_factor',
     "experiment_value" : 0.001,  # from lvis paper
-    "freeze_at" : 2,
+    "freeze_at" : 0,
     "validation" : True,
     "learning_rate" : 0.001,
     # model
     "model_name" : 'R_50_FPN',
     "backbone_name" : 'build_resnet_backbone_custom', # build_resnet_fpn_backbone (default) # build_resnet_backbone_custom
     "batch_size" : 256,
-    "experiment_number" : 59,
-    "checkpoint_period" : 5,
-    "eval_period" : 2,
-    "solver_steps" : (),
+    "experiment_number" : 57,
+    "checkpoint_period" : 5000,
+    "eval_period" : 1000,
+    "solver_steps" : (2000,),
 }
 
 # raster image
