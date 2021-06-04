@@ -30,7 +30,7 @@ train_config = {
     "experiment_value" : 0.001,  # from lvis paper
     "freeze_at" : 0,
     "validation" : True,
-    "learning_rate" : 0.00001,
+    "learning_rate" : 0.02,
     # model
     "model_name" : 'R_50_FPN',
     "backbone_name" : 'build_resnet_fpn_backbone', # build_resnet_fpn_backbone (default) # build_resnet_backbone_custom
