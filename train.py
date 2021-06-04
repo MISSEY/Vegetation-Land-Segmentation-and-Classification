@@ -57,9 +57,9 @@ def get_path():
 
 def register_data_set():
     # train_path,validation_path = get_path()
-    train_images = os.path.join(settings.data_directory,'train2017')
-    annotation = os.path.join(settings.data_directory,'annotations')
-    val_images = os.path.join(settings.data_directory,'val2017')
+    train_images = os.path.join(settings.data_directory_cluster,'train2017')
+    annotation = os.path.join(settings.data_directory_cluster,'annotations')
+    val_images = os.path.join(settings.data_directory_cluster,'val2017')
     register_coco_instances("coco_2017_train_", {},
                             os.path.join(annotation, 'instances_train2017.json'),
                             train_images
@@ -71,7 +71,7 @@ def register_data_set():
 
 def calculate_num_classes(version_name):
     # train_path, validation_path = get_path()
-    annotation = os.path.join(settings.data_directory, 'annotations')
+    annotation = os.path.join(settings.data_directory_cluster, 'annotations')
     annon = dictionary_utils.load_json(os.path.join(annotation, 'instances_val2017.json'))
     classes = len(annon['categories'])
     return(classes)
