@@ -81,19 +81,21 @@ def setup():
     register_data_set()
 
     cfg = get_cfg()
-    cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"))
-    # cfg.merge_from_file(os.path.join(settings.weights_directory, "config.yaml"))
+    # cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"))
+    cfg.merge_from_file(os.path.join("config.yaml"))
     cfg.DATASETS.TRAIN = ("veg_train_dataset",)
     # cfg.DATASETS.TRAIN = ("street_val_dataset",)
     cfg.DATASETS.TEST = ("veg_val_dataset",)
     # cfg.DATASETS.TEST = ()
     cfg.TEST.EVAL_PERIOD = config.train_config["eval_period"]
-    cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(
-        "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")  # Let training initialize from model zoo
+    # cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(
+    #     "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")  # Let training initialize from model zoo
     # cfg.MODEL.WEIGHTS = os.path.join(settings.weights_directory, "model_final.pth")
     cfg.SOLVER.CHECKPOINT_PERIOD = config.train_config["checkpoint_period"]
     cfg.SOLVER.BASE_LR = config.train_config["learning_rate"]  # pick a good LR
     cfg.SOLVER.MAX_ITER = config.train_config["epochs"]
+    cfg.INPUT.MASK_FORMAT = "polygon"
+    cfg.MODEL.RPN.NMS_THRESH = 0.6
 
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = calculate_num_classes(config._version_name)
     cfg.DATALOADER.SAMPLER_TRAIN = 'RepeatFactorTrainingSampler'
