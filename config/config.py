@@ -27,15 +27,15 @@ train_config = {
     'instance_per_image_filter' : 2000,
     "epochs" : 270000,
     "experiment_name" : 'resampling_factor',
-    "experiment_value" : 0.01,  # from lvis paper
+    "experiment_value" : 0.001,  # from lvis paper
     "freeze_at" : 0,
     "validation" : True,
-    "learning_rate" : 0.0001,
+    "learning_rate" : 0.00001,
     # model
-    "model_name" : 'R_18_FPN',
+    "model_name" : 'R_50_FPN',
     "backbone_name" : 'build_resnet_fpn_backbone', # build_resnet_fpn_backbone (default) # build_resnet_backbone_custom
     "batch_size" : 256,
-    "experiment_number" : 63,
+    "experiment_number" : 64,
     "checkpoint_period" : 50000,
     "eval_period" : 10000,
     "solver_steps" : (210000,250000),

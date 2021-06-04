@@ -81,8 +81,8 @@ def setup():
     register_data_set()
 
     cfg = get_cfg()
-    # cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"))
-    cfg.merge_from_file(os.path.join("config.yaml"))
+    cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"))
+    # cfg.merge_from_file(os.path.join("config.yaml"))
     cfg.DATASETS.TRAIN = ("veg_train_dataset",)
     # cfg.DATASETS.TRAIN = ("street_val_dataset",)
     cfg.DATASETS.TEST = ("veg_val_dataset",)
