@@ -31,7 +31,7 @@ _preprocessed_denamark_shape_files_ = cfg._preprocessed_denamark_shape_files_
 # Please see Preprocessing.ipynb for categorisation.
 
 reformatted_file_path = os.path.join(st.raw_shape_directory, 'Reformatted', denmark_shape_directory)
-processed_file_path = os.path.join(st.data_directory, _preprocessed_denamark_shape_files_, denmark_shape_directory)
+processed_file_path = os.path.join(st.data_directory, str(cfg._version_), _preprocessed_denamark_shape_files_, denmark_shape_directory)
 
 year = cfg.generate_year
 year_processed = year + '_processed'
@@ -260,7 +260,7 @@ def save_vectors_in_coco_annotations():
 
     for directory in tqdm(os.listdir(denmark_tif)):
         if (directory == 'whole_summer_winter_2020'):
-            version_path = os.path.join(st.data_directory, year_processed, 'v_' + directory)
+            version_path = os.path.join(st.data_directory, cfg._version_, year_processed, 'v_' + directory)
             pickle_path = os.path.join(version_path, str(image_size), 'final_crop_chip_info', 'chip_dfs.pickle')
 
             # saved shape file
@@ -320,15 +320,15 @@ if __name__ == '__main__':
     # clip_shape_on_raster_bounds()
     # print("finish Clipping on raster bounds")
 
-    print("Vector crop")
-    # 3. crop the vectors of defined image size
-    crop_vector_into_chips()
-    print("Finish Vector crop")
-
-    print("Raster image crop")
-    # 4. crop raster of defined image size
-    crop_raster_image()
-    print("Finish Raster image crop")
+    # print("Vector crop")
+    # # 3. crop the vectors of defined image size
+    # crop_vector_into_chips()
+    # print("Finish Vector crop")
+    #
+    # print("Raster image crop")
+    # # 4. crop raster of defined image size
+    # crop_raster_image()
+    # print("Finish Raster image crop")
 
     print("Annotations")
     # 5. split validation and training set and save into coco data format
