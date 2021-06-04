@@ -11,7 +11,7 @@ _data_ = 'Data'
 # Below directories should be inside _data_ , otherwise give full path instead of names
 _raw_shape_directory = 'Raw_shape_files'
 _tif_ = 'Denmark_tif'
-_version_ = 2
+_version_ = str(2)
 
 
 # train

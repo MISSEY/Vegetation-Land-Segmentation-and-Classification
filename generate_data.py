@@ -40,6 +40,7 @@ image_size = cfg.data_generation_image_size
 
 denmark_tif = os.path.join(st.data_directory, cfg._tif_, year)
 
+
 def create_directory(path):
     """
     Create directories if not found
@@ -128,122 +129,128 @@ def clip_shape_on_raster_bounds():
             df.to_file(os.path.join(path, str(filename) + '.shp'))
 
 
-def crop_vector_into_chips():
+def crop_vector_into_chips(name= None):
     """
     Crop vectors in chip defined image sizes and later on crop raster image
+     :param : name = name of file which need to be processed if none, all the shape files will be processed.
     :return: None
     """
 
     # for each tif
     for directory in tqdm(os.listdir(denmark_tif)):
+        print(directory)
+        if(directory == 'whole_summer_winter_2020'):
+            # count for generation of unique image
+            count = 0
 
-        # count for generation of unique image
-        count = 0
+            # track the image_id_count
+            file_name_image_id_count_dictionary = {}
+            final_chip_dfs = {}
+            version_path = os.path.join(st.data_directory, cfg._version_ ,year_processed, 'v_' + directory)
 
-        # track the image_id_count
-        file_name_image_id_count_dictionary = {}
-        final_chip_dfs = {}
-        version_path = os.path.join(st.data_directory, year_processed, 'v_' + directory)
+            for file in tqdm(os.listdir(os.path.join(denmark_tif, directory))):
 
-        for file in tqdm(os.listdir(os.path.join(denmark_tif, directory))):
+                # read raster image
+                with rasterio.open(os.path.join(denmark_tif, directory, file)) as src:
+                    raster_meta = src.meta
+                    raster_bounds = src.bounds
+                filename = file.split('.')[0]
 
-            # read raster image
-            with rasterio.open(os.path.join(denmark_tif, directory, file)) as src:
-                raster_meta = src.meta
-                raster_bounds = src.bounds
-            filename = file.split('.')[0]
+                # read corresponding vector
+                shape_ex = shapefile.Shape_Extractor(
+                    shape_file=os.path.join(version_path, cfg._version_processed_shape_files, str(filename) + '.shp'))
+                denmark_veg = shape_ex.import_shape()
+                prev = count
 
-            # read corresponding vector
-            shape_ex = shapefile.Shape_Extractor(
-                shape_file=os.path.join(version_path, cfg._version_processed_shape_files, str(filename) + '.shp'))
-            denmark_veg = shape_ex.import_shape()
-            prev = count
+                chip_name_prefix = 'COCO_train' + year + '_' + directory + '_000000'
 
-            chip_name_prefix = 'COCO_train' + year + '_' + directory + '_000000'
+                # crop the vector on raster height and width of defing image sixe and save the information into pickle
+                chip_dfs, count = so.crop_vector_in_chips(df=denmark_veg,
+                                                          raster_width=raster_meta['width'],
+                                                          raster_height=raster_meta['height'],
+                                                          raster_transform=raster_meta['transform'],
+                                                          chip_width=image_size,
+                                                          chip_height=image_size,
+                                                          count=count,
+                                                          chipname=chip_name_prefix,
+                                                          skip_partial_chips=True)
 
-            # crop the vector on raster height and width of defing image sixe and save the information into pickle
-            chip_dfs, count = so.crop_vector_in_chips(df=denmark_veg,
-                                                      raster_width=raster_meta['width'],
-                                                      raster_height=raster_meta['height'],
-                                                      raster_transform=raster_meta['transform'],
-                                                      chip_width=image_size,
-                                                      chip_height=image_size,
-                                                      count=count,
-                                                      chipname=chip_name_prefix,
-                                                      skip_partial_chips=True)
+                # create directory for each version to save chip info which later used on croping raster image
+                path = os.path.join(version_path, str(image_size), 'crop_chip_info')
+                try:
+                    os.makedirs(path)
+                except OSError:
+                    print("Creation of the directory %s failed" % path)
+                else:
+                    print("Creation of the directory %s Success" % path)
+                # save the dictionary in pickle,
+                chip_path = os.path.join(path, str(filename) + '.pickle')
+                final_chip_dfs.update(chip_dfs)
+                file_name_image_id_count_dictionary[filename] = list(range(prev, count))
+                dictionary_utils.new_pickle(chip_path, chip_dfs)
 
-            # create directory for each version to save chip info which later used on croping raster image
-            path = os.path.join(version_path, str(image_size), 'crop_chip_info')
+            # save final crop chip merging for each raster for the respective vector
+            path = os.path.join(version_path, str(image_size), 'final_crop_chip_info')
             try:
                 os.makedirs(path)
             except OSError:
                 print("Creation of the directory %s failed" % path)
             else:
                 print("Creation of the directory %s Success" % path)
-            # save the dictionary in pickle,
-            chip_path = os.path.join(path, str(filename) + '.pickle')
-            final_chip_dfs.update(chip_dfs)
-            file_name_image_id_count_dictionary[filename] = list(range(prev, count))
-            dictionary_utils.new_pickle(chip_path, chip_dfs)
 
-        # save final crop chip merging for each raster for the respective vector
-        path = os.path.join(version_path, str(image_size), 'final_crop_chip_info')
-        try:
-            os.makedirs(path)
-        except OSError:
-            print("Creation of the directory %s failed" % path)
-        else:
-            print("Creation of the directory %s Success" % path)
-
-        # save in pickle
-        dictionary_utils.new_pickle(os.path.join(path, 'chip_dfs.pickle'), final_chip_dfs)
-        dictionary_utils.new_pickle(os.path.join(path, 'file_name_image_id_count_dictionary.pickle'),
-                                    file_name_image_id_count_dictionary)
+            # save in pickle
+            dictionary_utils.new_pickle(os.path.join(path, 'chip_dfs.pickle'), final_chip_dfs)
+            dictionary_utils.new_pickle(os.path.join(path, 'file_name_image_id_count_dictionary.pickle'),
+                                        file_name_image_id_count_dictionary)
 
 
-def crop_raster_image():
+def crop_raster_image(name=None):
     """
     Crop raster as did for vector , load the saved chip info and crop raster on defined image size and save it to
     directory
+
+    :param : name = name of file which need to be processed if none, all the shape files will be processed.
     :return:
     """
+
     for directory in tqdm(os.listdir(denmark_tif)):
-        version_path = os.path.join(st.data_directory, year_processed, 'v_' + directory)
-        pickle_path = os.path.join(version_path, str(image_size), 'final_crop_chip_info')
+        if (directory == 'whole_summer_winter_2020'):
+            version_path = os.path.join(st.data_directory, cfg._version_ ,year_processed, 'v_' + directory)
+            pickle_path = os.path.join(version_path, str(image_size), 'final_crop_chip_info')
 
-        # load the saved chip infos
-        file_name_image_id_count_dictionary = dictionary_utils.load_pickle(
-            os.path.join(pickle_path, 'file_name_image_id_count_dictionary.pickle')
-        )
-        final_chip_dfs = dictionary_utils.load_pickle(
-            os.path.join(pickle_path, 'chip_dfs.pickle')
-        )
-        for file in tqdm(os.listdir(os.path.join(denmark_tif, directory))):
-            filename = file.split('.')[0]
-            chip_dfsss = file_name_image_id_count_dictionary[filename]
-            chip_windows = {}
-            raster_image_max = 2200  # Value used while extracting the sentinel-2 image
-            path = os.path.join(version_path, str(image_size), cfg._version_crop_images_)
-            try:
-                os.makedirs(path)
-            except OSError:
-                print("Creation of the directory %s failed" % path)
-            else:
-                print("Creation of the directory %s Success" % path)
+            # load the saved chip infos
+            file_name_image_id_count_dictionary = dictionary_utils.load_pickle(
+                os.path.join(pickle_path, 'file_name_image_id_count_dictionary.pickle')
+            )
+            final_chip_dfs = dictionary_utils.load_pickle(
+                os.path.join(pickle_path, 'chip_dfs.pickle')
+            )
+            for file in tqdm(os.listdir(os.path.join(denmark_tif, directory))):
+                filename = file.split('.')[0]
+                chip_dfsss = file_name_image_id_count_dictionary[filename]
+                chip_windows = {}
+                raster_image_max = 2200  # Value used while extracting the sentinel-2 image
+                path = os.path.join(version_path, str(image_size), cfg._version_crop_images_)
+                try:
+                    os.makedirs(path)
+                except OSError:
+                    print("Creation of the directory %s failed" % path)
+                else:
+                    print("Creation of the directory %s Success" % path)
 
-            chip_name_prefix = 'COCO_train' + year + '_' + directory + '_000000'
+                chip_name_prefix = 'COCO_train' + year + '_' + directory + '_000000'
 
-            # for each chip crop the raster image based on bounds and save it to directory
-            for chip_no in chip_dfsss:
-                chip_name = chip_name_prefix+f'{100000 + chip_no}'
-                chip_windows.update({chip_name: final_chip_dfs[chip_name]['chip_window']})
+                # for each chip crop the raster image based on bounds and save it to directory
+                for chip_no in chip_dfsss:
+                    chip_name = chip_name_prefix+f'{100000 + chip_no}'
+                    chip_windows.update({chip_name: final_chip_dfs[chip_name]['chip_window']})
 
-            # cut chips
-            stats = rf.cut_chip_images(inpath_raster=os.path.join(denmark_tif, directory, file),
-                                       outpath_chipfolder=path,
-                                       chip_names=chip_windows.keys(),
-                                       chip_windows=chip_windows.values(),
-                                       raster_image_range=raster_image_max)
+                # cut chips
+                stats = rf.cut_chip_images(inpath_raster=os.path.join(denmark_tif, directory, file),
+                                           outpath_chipfolder=path,
+                                           chip_names=chip_windows.keys(),
+                                           chip_windows=chip_windows.values(),
+                                           raster_image_range=raster_image_max)
 
 def save_vectors_in_coco_annotations():
     """
@@ -252,53 +259,54 @@ def save_vectors_in_coco_annotations():
     """
 
     for directory in tqdm(os.listdir(denmark_tif)):
-        version_path = os.path.join(st.data_directory, year_processed, 'v_' + directory)
-        pickle_path = os.path.join(version_path, str(image_size), 'final_crop_chip_info', 'chip_dfs.pickle')
+        if (directory == 'whole_summer_winter_2020'):
+            version_path = os.path.join(st.data_directory, year_processed, 'v_' + directory)
+            pickle_path = os.path.join(version_path, str(image_size), 'final_crop_chip_info', 'chip_dfs.pickle')
 
-        # saved shape file
-        file = directory + '.shp'
-        shape_ex = shapefile.Shape_Extractor(shape_file=os.path.join(processed_file_path, file))
-        denmark_veg = shape_ex.import_shape()
+            # saved shape file
+            file = directory + '.shp'
+            shape_ex = shapefile.Shape_Extractor(shape_file=os.path.join(processed_file_path, file))
+            denmark_veg = shape_ex.import_shape()
 
-        final_chip_dfs = dictionary_utils.load_pickle(pickle_path)
+            final_chip_dfs = dictionary_utils.load_pickle(pickle_path)
 
-        # split into training and validation sets
-        train_chip_dfs, val_chip_dfs = coco_utils.train_test_split(final_chip_dfs, test_size=0.2, seed=1)
+            # split into training and validation sets
+            train_chip_dfs, val_chip_dfs = coco_utils.train_test_split(final_chip_dfs, test_size=0.2, seed=1)
 
-        coco_train = coco_utils.format_coco(train_chip_dfs, image_size, image_size, denmark_veg)
-        coco_val = coco_utils.format_coco(val_chip_dfs, image_size, image_size, denmark_veg)
+            coco_train = coco_utils.format_coco(train_chip_dfs, image_size, image_size, denmark_veg)
+            coco_val = coco_utils.format_coco(val_chip_dfs, image_size, image_size, denmark_veg)
 
-        path_train = os.path.join(version_path, str(image_size), cfg._version_train_)
-        path_val = os.path.join(version_path, str(image_size), cfg._version_validation_)
+            path_train = os.path.join(version_path, str(image_size), cfg._version_train_)
+            path_val = os.path.join(version_path, str(image_size), cfg._version_validation_)
 
-        try:
-            os.makedirs(os.path.join(path_train, 'images'))
-            os.makedirs(os.path.join(path_train, 'annotation'))
-            os.makedirs(os.path.join(path_val, 'images'))
-            os.makedirs(os.path.join(path_val, 'annotation'))
+            try:
+                os.makedirs(os.path.join(path_train, 'images'))
+                os.makedirs(os.path.join(path_train, 'annotation'))
+                os.makedirs(os.path.join(path_val, 'images'))
+                os.makedirs(os.path.join(path_val, 'annotation'))
 
-        except OSError:
-            print("Creation of the directory {0} and {1}  failed".format(path_train, path_val))
-        else:
-            print("Creation of the directory {0} and {1} Success".format(path_train, path_val))
+            except OSError:
+                print("Creation of the directory {0} and {1}  failed".format(path_train, path_val))
+            else:
+                print("Creation of the directory {0} and {1} Success".format(path_train, path_val))
 
-        dictionary_utils.new_json(outpath=os.path.join(path_train, 'annotation/train'+year+'.json'), data=coco_train)
-        dictionary_utils.new_json(outpath=os.path.join(path_val, 'annotation/val'+year+'.json'), data=coco_val)
+            dictionary_utils.new_json(outpath=os.path.join(path_train, 'annotation/train'+year+'.json'), data=coco_train)
+            dictionary_utils.new_json(outpath=os.path.join(path_val, 'annotation/val'+year+'.json'), data=coco_val)
 
-        ## Split the images in train and validation
-        # Split the cropped images into train and validation with the help of train_chip_dfs and val_chip_dfs
+            ## Split the images in train and validation
+            # Split the cropped images into train and validation with the help of train_chip_dfs and val_chip_dfs
 
-        train_images, validation_images = list(train_chip_dfs.keys()), list(val_chip_dfs.keys())
+            train_images, validation_images = list(train_chip_dfs.keys()), list(val_chip_dfs.keys())
 
-        cropped_path = os.path.join(version_path, str(image_size), cfg._version_crop_images_)
-        for image in validation_images:
-            img = image.replace('val', 'train')
-            copyfile(os.path.join(cropped_path, str(img) + '.jpg'),
-                     os.path.join(path_val, 'images/' + str(image) + '.jpg'))
+            cropped_path = os.path.join(version_path, str(image_size), cfg._version_crop_images_)
+            for image in validation_images:
+                img = image.replace('val', 'train')
+                copyfile(os.path.join(cropped_path, str(img) + '.jpg'),
+                         os.path.join(path_val, 'images/' + str(image) + '.jpg'))
 
-        for image in train_images:
-            copyfile(os.path.join(cropped_path, str(image) + '.jpg'),
-                     os.path.join(path_train, 'images/' + str(image) + '.jpg'))
+            for image in train_images:
+                copyfile(os.path.join(cropped_path, str(image) + '.jpg'),
+                         os.path.join(path_train, 'images/' + str(image) + '.jpg'))
 
 
 if __name__ == '__main__':

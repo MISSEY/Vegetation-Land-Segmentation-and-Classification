@@ -24,18 +24,32 @@ from backbone import resnet
 import yaml
 
 
+
 def register_data_set():
     if (config.debug):
 
-        train_path = os.path.join(settings.data_directory, config.train_year + '_processed', config._version_name,
+        train_path = os.path.join(settings.data_directory, str(config._version_),
+                                  config.train_year + '_processed', config._version_name,
                                   str(config.train_image_size), config._version_train_)
-        validation_path = os.path.join(settings.data_directory, config.train_year + '_processed', config._version_name,
-                                       str(config.train_image_size), config._version_validation_)
+        validation_path = os.path.join(settings.data_directory, str(config._version_),
+                                       config.train_year + '_processed', config._version_name,
+                                       str(config.train_image_size), config._version_validation_
+                                       )
     else:
-        train_path = os.path.join(settings.data_directory_cluster, str(config._version_), config.train_year + '_processed',
-                                  config._version_name, str(config.train_image_size), config._version_train_)
-        validation_path = os.path.join(settings.data_directory_cluster, str(config._version_), config.train_year + '_processed',
-                                       config._version_name, str(config.train_image_size), config._version_validation_)
+        train_path = os.path.join(settings.data_directory_cluster,
+                                  str(config._version_),
+                                  config.train_year + '_processed',
+                                  config._version_name,
+                                  str(config.train_image_size),
+                                  config._version_train_
+                                  )
+        validation_path = os.path.join(settings.data_directory_cluster,
+                                       str(config._version_),
+                                       config.train_year + '_processed',
+                                       config._version_name,
+                                       str(config.train_image_size),
+                                       config._version_validation_
+                                       )
     register_coco_instances("veg_train_dataset", {},
                             os.path.join(train_path, 'annotation', 'train' + config.train_year + '.json'),
                             os.path.join(train_path, 'images'))
@@ -45,16 +59,17 @@ def register_data_set():
 
 
 def calculate_num_classes(version_name):
-    if version_name == 'v_Jan_Mar':
-        return 4
-    elif version_name == 'v_Apr_Jun':
-        return 7
-    elif version_name == 'v_Jul_Sep':
-        return 7
-    elif version_name == 'v_Oct_Dec':
-        return 6
-    else:
-        return 2
+    json_path = os.path.join(settings.data_directory,
+                             str(config._version_),
+                             config.train_year + '_processed',
+                             config._version_name,
+                             str(config.train_image_size),
+                             config._version_validation_
+                             )
+
+    annon = dictionary_utils.load_json(os.path.join(json_path, 'annotation', 'val' + config.train_year + '.json'))
+    classes = len(annon['categories'])
+    return(classes)
 
 
 def setup():
