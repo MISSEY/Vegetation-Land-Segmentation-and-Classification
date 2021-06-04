@@ -23,9 +23,11 @@ from backbone import resnet
 
 import yaml
 
+def get_path():
+    """
 
-
-def register_data_set():
+    :return:
+    """
     if (config.debug):
 
         train_path = os.path.join(settings.data_directory, str(config._version_),
@@ -50,6 +52,12 @@ def register_data_set():
                                        str(config.train_image_size),
                                        config._version_validation_
                                        )
+    return train_path,validation_path
+
+
+def register_data_set():
+    train_path,validation_path = get_path()
+
     register_coco_instances("veg_train_dataset", {},
                             os.path.join(train_path, 'annotation', 'train' + config.train_year + '.json'),
                             os.path.join(train_path, 'images'))
@@ -59,15 +67,8 @@ def register_data_set():
 
 
 def calculate_num_classes(version_name):
-    json_path = os.path.join(settings.data_directory,
-                             str(config._version_),
-                             config.train_year + '_processed',
-                             config._version_name,
-                             str(config.train_image_size),
-                             config._version_validation_
-                             )
-
-    annon = dictionary_utils.load_json(os.path.join(json_path, 'annotation', 'val' + config.train_year + '.json'))
+    train_path, validation_path = get_path()
+    annon = dictionary_utils.load_json(os.path.join(validation_path, 'annotation', 'val' + config.train_year + '.json'))
     classes = len(annon['categories'])
     return(classes)
 
