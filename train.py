@@ -60,11 +60,11 @@ def register_data_set():
     train_images = os.path.join(settings.data_directory,'train2017')
     annotation = os.path.join(settings.data_directory,'annotations')
     val_images = os.path.join(settings.data_directory,'val2017')
-    register_coco_instances("coco_2017_train", {},
+    register_coco_instances("coco_2017_train_", {},
                             os.path.join(annotation, 'instances_train2017.json'),
                             train_images
                             )
-    register_coco_instances("coco_2017_val", {},
+    register_coco_instances("coco_2017_val_", {},
                             os.path.join(annotation, 'instances_val2017.json'),
                             val_images)
 
@@ -87,9 +87,9 @@ def setup():
     cfg = get_cfg()
     cfg.merge_from_file(model_zoo.get_config_file("Base-RCNN-FPN.yaml"))
     # cfg.merge_from_file(os.path.join(settings.weights_directory, "config.yaml"))
-    cfg.DATASETS.TRAIN = ("coco_2017_train",)
+    cfg.DATASETS.TRAIN = ("coco_2017_train_",)
     # cfg.DATASETS.TRAIN = ("street_val_dataset",)
-    cfg.DATASETS.TEST = ("coco_2017_val",)
+    cfg.DATASETS.TEST = ("coco_2017_val_",)
     # cfg.DATASETS.TEST = ()
     cfg.TEST.EVAL_PERIOD = config.train_config["eval_period"]
     cfg.MODEL.RESNETS.DEPTH = 18
