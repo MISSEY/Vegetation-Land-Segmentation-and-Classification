@@ -24,7 +24,7 @@ check_point_output_directory = '/netscratch/smishra/thesis/output/output' + unde
                                str(config.train_config["learning_rate"]) + underscore + \
                                'freeze_at' + str(config.train_config["freeze_at"])
 
-data_directory_cluster = '/netscratch/smishra/thesis/vegetation_dataset'
+data_directory_cluster = '/ds/images/MSCOCO2017'
 
 weights_directory = '/netscratch/smishra/output'
 

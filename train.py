@@ -56,19 +56,23 @@ def get_path():
 
 
 def register_data_set():
-    train_path,validation_path = get_path()
-
-    register_coco_instances("veg_train_dataset", {},
-                            os.path.join(train_path, 'annotation', 'train' + config.train_config["train_year"] + '.json'),
-                            os.path.join(train_path, 'images'))
-    register_coco_instances("veg_val_dataset", {},
-                            os.path.join(validation_path, 'annotation', 'val' + config.train_config["train_year"] + '.json'),
-                            os.path.join(validation_path, 'images'))
+    # train_path,validation_path = get_path()
+    train_images = os.path.join(settings.data_directory,'train2017')
+    annotation = os.path.join(settings.data_directory,'annotations')
+    val_images = os.path.join(settings.data_directory,'val2017')
+    register_coco_instances("coco_2017_train", {},
+                            os.path.join(annotation, 'instances_train2017.json'),
+                            train_images
+                            )
+    register_coco_instances("coco_2017_val", {},
+                            os.path.join(annotation, 'instances_val2017.json'),
+                            val_images)
 
 
 def calculate_num_classes(version_name):
-    train_path, validation_path = get_path()
-    annon = dictionary_utils.load_json(os.path.join(validation_path, 'annotation', 'val' + config.train_config["train_year"] + '.json'))
+    # train_path, validation_path = get_path()
+    annotation = os.path.join(settings.data_directory, 'annotations')
+    annon = dictionary_utils.load_json(os.path.join(annotation, 'instances_val2017.json'))
     classes = len(annon['categories'])
     return(classes)
 
@@ -81,15 +85,19 @@ def setup():
     register_data_set()
 
     cfg = get_cfg()
-    cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"))
+    cfg.merge_from_file(model_zoo.get_config_file("Base-RCNN-FPN.yaml"))
     # cfg.merge_from_file(os.path.join(settings.weights_directory, "config.yaml"))
-    cfg.DATASETS.TRAIN = ("veg_train_dataset",)
+    cfg.DATASETS.TRAIN = ("coco_2017_train",)
     # cfg.DATASETS.TRAIN = ("street_val_dataset",)
-    cfg.DATASETS.TEST = ("veg_val_dataset",)
+    cfg.DATASETS.TEST = ("coco_2017_val",)
     # cfg.DATASETS.TEST = ()
     cfg.TEST.EVAL_PERIOD = config.train_config["eval_period"]
-    cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(
-        "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")  # Let training initialize from model zoo
+    cfg.MODEL.RESNETS.DEPTH = 18
+    cfg.MODEL.RESNETS.RES5_DILATION = 1
+    cfg.MODEL.RESNETS.DEFORM_ON_PER_STAGE = [False, False, False, False]
+    cfg.MODEL.RESNETS.DEFORM_NUM_GROUPS = 1
+    # cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(
+    #     "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")  # Let training initialize from model zoo
     # cfg.MODEL.WEIGHTS = os.path.join(settings.weights_directory, "model_final.pth")
     cfg.SOLVER.CHECKPOINT_PERIOD = config.train_config["checkpoint_period"]
     cfg.SOLVER.BASE_LR = config.train_config["learning_rate"]  # pick a good LR
@@ -101,7 +109,7 @@ def setup():
     # cfg.INPUT.MIN_SIZE_TRAIN = (800,)
 
     # To stop auto resize
-    cfg.INPUT.MIN_SIZE_TEST = 0
+    # cfg.INPUT.MIN_SIZE_TEST = 0
 
     cfg.MODEL.BACKBONE.NAME = config.train_config["backbone_name"]
     cfg.MODEL.BACKBONE.FREEZE_AT = config.train_config["freeze_at"]

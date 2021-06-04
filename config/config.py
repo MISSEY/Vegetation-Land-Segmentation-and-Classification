@@ -12,7 +12,7 @@ _data_ = 'Data'
 _raw_shape_directory = 'Raw_shape_files'
 _tif_ = 'Denmark_tif'
 _version_ = str(2)
-_version_name ='v_whole_summer_winter_2020'
+_version_name ='coco2017'
 _version_processed_shape_files = 'processed_shape_files' # Each version has unique files depending on category. ,
 # It must be inside version name
 _version_train_ = 'train'
@@ -25,20 +25,20 @@ train_config = {
     # change version name while training
     'train_image_size' : 896,
     'instance_per_image_filter' : 2000,
-    "epochs" : 10000,
+    "epochs" : 270000,
     "experiment_name" : 'resampling_factor',
     "experiment_value" : 0.01,  # from lvis paper
     "freeze_at" : 0,
     "validation" : True,
-    "learning_rate" : 0.0001,
+    "learning_rate" : 0.02,
     # model
-    "model_name" : 'R_50_FPN',
-    "backbone_name" : 'build_resnet_backbone_custom', # build_resnet_fpn_backbone (default) # build_resnet_backbone_custom
-    "batch_size" : 256,
-    "experiment_number" : 61,
-    "checkpoint_period" : 5000,
-    "eval_period" : 1000,
-    "solver_steps" : (2000,),
+    "model_name" : 'R_18_FPN',
+    "backbone_name" : 'build_resnet_fpn_backbone', # build_resnet_fpn_backbone (default) # build_resnet_backbone_custom
+    "batch_size" : 512,
+    "experiment_number" : 62,
+    "checkpoint_period" : 50000,
+    "eval_period" : 10000,
+    "solver_steps" : (210000, 250000)
 }
 
 # raster image
