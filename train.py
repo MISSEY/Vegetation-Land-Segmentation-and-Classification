@@ -100,6 +100,7 @@ def setup():
     cfg.SOLVER.STEPS = config.train_config["solver_steps"]
     # cfg.INPUT.MIN_SIZE_TRAIN = (800,)
 
+    # To stop auto resize
     cfg.INPUT.MIN_SIZE_TEST = 0
 
     cfg.MODEL.BACKBONE.NAME = config.train_config["backbone_name"]

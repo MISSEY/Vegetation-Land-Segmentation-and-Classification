@@ -378,19 +378,34 @@ class BasicStem2(CNNBlockBase):
         self.in_channels = in_channels
         self.conv1 = Conv2d(
             in_channels,
-            out_channels,
-            kernel_size=11,
-            stride=4,
-            padding=5,
+            int(out_channels/4),
+            kernel_size=5,
+            stride=2,
+            padding=2,
             bias=False,
-            norm=get_norm(norm, out_channels),
+            norm=get_norm(norm, int(out_channels/4)),
         )
         weight_init.c2_msra_fill(self.conv1)
+
+        self.conv2 = Conv2d(
+            int(out_channels/4),
+            int(out_channels),
+            kernel_size=7,
+            stride=2,
+            padding=3,
+            bias=False,
+            norm=get_norm(norm, int(out_channels)),
+        )
+        weight_init.c2_msra_fill(self.conv2)
 
 
 
     def forward(self, x):
         x = self.conv1(x)
+        x = F.relu_(x)
+        x = F.max_pool2d(x, kernel_size=3, stride=2, padding=1)
+
+        x = self.conv2(x)
         x = F.relu_(x)
         x = F.max_pool2d(x, kernel_size=3, stride=2, padding=1)
         return x

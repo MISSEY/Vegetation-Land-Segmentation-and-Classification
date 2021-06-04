@@ -64,10 +64,10 @@ class Basehook(engine.HookBase):
         logger.info("Start inference on {} images".format(len(self._data_loader)))
 
         total = len(self._data_loader)  # inference data loader must have a fixed length
-        if self.evaluator is None:
-            # create a no-op evaluator
-            self.evaluator = DatasetEvaluators([])
-        self.evaluator.reset()
+        # if self.evaluator is None:
+        #     # create a no-op evaluator
+        #     self.evaluator = DatasetEvaluators([])
+        # self.evaluator.reset()
 
         num_warmup = min(5, total - 1)
         start_time = time.perf_counter()
@@ -124,28 +124,28 @@ class Basehook(engine.HookBase):
             )
         )
 
-        results = self.evaluator.evaluate()
-        # An evaluator may return None when not in main process.
-        # Replace it by an empty dict instead to make it easier for downstream code to handle
-        if results is None:
-            results = {}
-
-        # copy from hooks.py
-
-        assert isinstance(
-            results, dict
-        ), "Eval function must return a dict. Got {} instead.".format(results)
-
-        flattened_results = flatten_results_dict(results)
-        for k, v in flattened_results.items():
-            try:
-                v = float(v)
-            except Exception as e:
-                raise ValueError(
-                    "[EvalHook] eval_function should return a nested dict of float. "
-                    "Got '{}: {}' instead.".format(k, v)
-                ) from e
-        self.trainer.storage.put_scalars(**flattened_results, smoothing_hint=False)
+        # results = self.evaluator.evaluate()
+        # # An evaluator may return None when not in main process.
+        # # Replace it by an empty dict instead to make it easier for downstream code to handle
+        # if results is None:
+        #     results = {}
+        #
+        # # copy from hooks.py
+        #
+        # assert isinstance(
+        #     results, dict
+        # ), "Eval function must return a dict. Got {} instead.".format(results)
+        #
+        # flattened_results = flatten_results_dict(results)
+        # for k, v in flattened_results.items():
+        #     try:
+        #         v = float(v)
+        #     except Exception as e:
+        #         raise ValueError(
+        #             "[EvalHook] eval_function should return a nested dict of float. "
+        #             "Got '{}: {}' instead.".format(k, v)
+        #         ) from e
+        # self.trainer.storage.put_scalars(**flattened_results, smoothing_hint=False)
 
         # Evaluation may take different time among workers.
         # A barrier make them start the next iteration together.
@@ -379,11 +379,11 @@ class BaseTrainer(engine.DefaultTrainer):
 
     def build_hooks(self):
         hooks = super().build_hooks()
-        for idx, h in enumerate(hooks):
-            if isinstance(h, hk.EvalHook):
-                k = idx
-        if(k):
-            del hooks[k]
+        # for idx, h in enumerate(hooks):
+        #     if isinstance(h, hk.EvalHook):
+        #         k = idx
+        # if(k):
+        #     del hooks[k]
         if self.local_config["validation"]:
             hooks.insert(-1, Basehook(
                 self.validation_period,
