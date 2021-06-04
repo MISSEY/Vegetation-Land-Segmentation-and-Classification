@@ -97,6 +97,7 @@ def setup():
     cfg.MODEL.RESNETS.DEFORM_ON_PER_STAGE = [False, False, False, False]
     cfg.MODEL.RESNETS.DEFORM_NUM_GROUPS = 1
     cfg.MODEL.RESNETS.RES2_OUT_CHANNELS = 64
+    cfg.INPUT.MASK_FORMAT = "bitmask"
     # cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(
     #     "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")  # Let training initialize from model zoo
     # cfg.MODEL.WEIGHTS = os.path.join(settings.weights_directory, "model_final.pth")
