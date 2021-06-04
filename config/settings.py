@@ -16,13 +16,13 @@ underscore = '_'
 # while training on cluster
 
 check_point_output_directory = '/netscratch/smishra/thesis/output/output' + underscore + \
-                               str(config.experiment_number) + underscore + \
-                               str(config.train_image_size) + underscore + \
-                               str(config.model_name) + underscore + \
+                               str(config.train_config["experiment_number"]) + underscore + \
+                               str(config.train_config["train_image_size"]) + underscore + \
+                               str(config.train_config["model_name"]) + underscore + \
                                str(config._version_name) + underscore + \
-                               str(config.experiment_name) + str(config.experiment_value) + underscore + \
-                               str(config.learning_rate) + underscore + \
-                               'freeze_at' + str(config.freeze_at)
+                               str(config.train_config["experiment_name"]) + str(config.train_config["experiment_value"]) + underscore + \
+                               str(config.train_config["learning_rate"]) + underscore + \
+                               'freeze_at' + str(config.train_config["freeze_at"])
 
 data_directory_cluster = '/netscratch/smishra/thesis/vegetation_dataset'
 
