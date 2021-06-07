@@ -25,8 +25,8 @@ train_config = {
     # change version name while training
     'train_image_size' : 224,
     'instance_per_image_filter' : 2000,
-    "epochs" : 150000,
-    "experiment_name" : 'resampling_factor NO',
+    "epochs" : 10000,
+    "experiment_name" : 'resampling_factor',
     "experiment_value" : 0.001,  # from lvis paper
     "freeze_at" : 0,
     "validation" : True,
@@ -35,11 +35,11 @@ train_config = {
     "model_name" : 'R_50_FPN',
     "backbone_name" : 'build_resnet_fpn_backbone', # build_resnet_fpn_backbone (default) # build_resnet_backbone_custom
     "batch_size" : 256,
-    "experiment_number" : 70,
-    "checkpoint_period" : 50000,
-    "eval_period" : 10000,
-    "solver_steps" : (20000,50000),
-    "train_from_scratch" : True,
+    "experiment_number" : 71,
+    "checkpoint_period" : 5000,
+    "eval_period" : 1000,
+    "solver_steps" : (2000,5000),
+    "train_from_scratch" : False,
 }
 
 # raster image
