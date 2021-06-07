@@ -28,7 +28,7 @@ train_config = {
     "epochs" : 20000,
     "experiment_name" : 'resampling_factor',
     "experiment_value" : 0.001,  # from lvis paper
-    "freeze_at" : 0,
+    "freeze_at" : 2,
     "validation" : True,
     "learning_rate" : 0.001,
     # model
