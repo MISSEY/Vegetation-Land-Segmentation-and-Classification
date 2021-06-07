@@ -88,8 +88,6 @@ def setup():
     cfg.DATASETS.TEST = ("veg_val_dataset",)
     # cfg.DATASETS.TEST = ()
     cfg.TEST.EVAL_PERIOD = config.train_config["eval_period"]
-    cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(
-        "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")  # Let training initialize from model zoo
     # cfg.MODEL.WEIGHTS = os.path.join(settings.weights_directory, "model_final.pth")
     cfg.SOLVER.CHECKPOINT_PERIOD = config.train_config["checkpoint_period"]
     cfg.SOLVER.BASE_LR = config.train_config["learning_rate"]  # pick a good LR
@@ -120,6 +118,10 @@ def setup():
     if config.train_config["experiment_name"] == 'resampling_factor':
         cfg.DATALOADER.SAMPLER_TRAIN = 'RepeatFactorTrainingSampler'
         cfg.DATALOADER.REPEAT_THRESHOLD = config.train_config["experiment_value"]
+
+    if not config.train_config["train_from_scratch"]:
+        cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(
+            "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")  # Let training initialize from model zoo
 
     # cfg.DATALOADER.FILTER_EMPTY_ANNOTATIONS = False
 

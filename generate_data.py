@@ -30,7 +30,7 @@ _preprocessed_denamark_shape_files_ = cfg._preprocessed_denamark_shape_files_
 # File path where vector shape files for each categories are saved after filtering
 # Please see Preprocessing.ipynb for categorisation.
 
-reformatted_file_path = os.path.join(st.raw_shape_directory, 'Reformatted', denmark_shape_directory)
+reformatted_file_path = os.path.join(st.data_directory, str(cfg._version_), 'Reformatted', denmark_shape_directory)
 processed_file_path = os.path.join(st.data_directory, str(cfg._version_), _preprocessed_denamark_shape_files_, denmark_shape_directory)
 
 year = cfg.generate_year
@@ -87,7 +87,7 @@ def clip_shape_on_raster_bounds():
     """
     # create directory for yearly processed shape files
 
-    path = os.path.join(st.data_directory, year_processed)
+    path = os.path.join(st.data_directory, cfg._version_, year_processed)
     try:
         os.makedirs(path)
     except OSError:
@@ -98,35 +98,36 @@ def clip_shape_on_raster_bounds():
     # For each tif crop each category shape files and save in the processed folder
 
     for directory in tqdm(os.listdir(denmark_tif)):
-        shape_ex = shapefile.Shape_Extractor(shape_file=os.path.join(processed_file_path, str(directory) + '.shp'))
-        denmark_veg = shape_ex.import_shape()
+        if (directory == 'whole_summer_winter_2020'):
+            shape_ex = shapefile.Shape_Extractor(shape_file=os.path.join(processed_file_path, str(directory) + '.shp'))
+            denmark_veg = shape_ex.import_shape()
 
-        # crs used while extracting the raster image
-        denmark_veg = denmark_veg.to_crs(cfg.crs)
+            # crs used while extracting the raster image
+            denmark_veg = denmark_veg.to_crs(cfg.crs)
 
-        # For each raster (4-5 categories)
-        for file in tqdm(os.listdir(os.path.join(denmark_tif, directory))):
-            # load raster and extract bounds for cliping
-            with rasterio.open(os.path.join(denmark_tif, directory, file)) as src:
-                raster_meta = src.meta
-                raster_bounds = src.bounds
+            # For each raster (4-5 categories)
+            for file in tqdm(os.listdir(os.path.join(denmark_tif, directory))):
+                # load raster and extract bounds for cliping
+                with rasterio.open(os.path.join(denmark_tif, directory, file)) as src:
+                    raster_meta = src.meta
+                    raster_bounds = src.bounds
 
-            filename = file.split('.')[0]
+                filename = file.split('.')[0]
 
-            # clip the shape files on raster bounds
-            df = shape_ex.clip(df=denmark_veg, clip_poly=shapely.geometry.box(*raster_bounds), keep_biggest_poly_=True)
+                # clip the shape files on raster bounds
+                df = shape_ex.clip(df=denmark_veg, clip_poly=shapely.geometry.box(*raster_bounds), keep_biggest_poly_=True)
 
-            df = df.assign(area_sqm=df.geometry.area)
+                df = df.assign(area_sqm=df.geometry.area)
 
-            # save it in processed directory for each categories
-            path = os.path.join(st.data_directory, year_processed, 'v_' + directory, cfg._version_processed_shape_files)
-            try:
-                os.makedirs(path)
-            except OSError:
-                print("Creation of the directory %s failed" % path)
-            else:
-                print("Creation of the directory %s Success" % path)
-            df.to_file(os.path.join(path, str(filename) + '.shp'))
+                # save it in processed directory for each categories
+                path = os.path.join(st.data_directory, cfg._version_, year_processed, 'v_' + directory, cfg._version_processed_shape_files)
+                try:
+                    os.makedirs(path)
+                except OSError:
+                    print("Creation of the directory %s failed" % path)
+                else:
+                    print("Creation of the directory %s Success" % path)
+                df.to_file(os.path.join(path, str(filename) + '.shp'))
 
 
 def crop_vector_into_chips(name= None):
@@ -319,7 +320,7 @@ if __name__ == '__main__':
     # # 2. clip shape on raster bounds
     # clip_shape_on_raster_bounds()
     # print("finish Clipping on raster bounds")
-
+    #
     # print("Vector crop")
     # # 3. crop the vectors of defined image size
     # crop_vector_into_chips()

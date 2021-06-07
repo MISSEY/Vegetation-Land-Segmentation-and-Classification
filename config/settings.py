@@ -19,6 +19,7 @@ check_point_output_directory = '/netscratch/smishra/thesis/output/output' + unde
                                str(config.train_config["experiment_number"]) + underscore + \
                                str(config.train_config["train_image_size"]) + underscore + \
                                str(config.train_config["model_name"]) + underscore + \
+                               str(config._version_) + underscore + \
                                str(config._version_name) + underscore + \
                                str(config.train_config["experiment_name"]) + str(config.train_config["experiment_value"]) + underscore + \
                                str(config.train_config["learning_rate"]) + underscore + \
