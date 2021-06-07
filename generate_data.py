@@ -321,15 +321,15 @@ if __name__ == '__main__':
     # clip_shape_on_raster_bounds()
     # print("finish Clipping on raster bounds")
     #
-    # print("Vector crop")
-    # # 3. crop the vectors of defined image size
-    # crop_vector_into_chips()
-    # print("Finish Vector crop")
-    #
-    # print("Raster image crop")
-    # # 4. crop raster of defined image size
-    # crop_raster_image()
-    # print("Finish Raster image crop")
+    print("Vector crop")
+    # 3. crop the vectors of defined image size
+    crop_vector_into_chips()
+    print("Finish Vector crop")
+
+    print("Raster image crop")
+    # 4. crop raster of defined image size
+    crop_raster_image()
+    print("Finish Raster image crop")
 
     print("Annotations")
     # 5. split validation and training set and save into coco data format
