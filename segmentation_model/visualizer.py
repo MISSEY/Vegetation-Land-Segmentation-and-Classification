@@ -2,6 +2,9 @@ from detectron2.utils.visualizer import Visualizer
 from detectron2.utils.visualizer import ColorMode
 from detectron2.utils import visualizer as vi
 import numpy as np
+from PIL import Image
+from detectron2.utils.file_io import PathManager
+from detectron2.structures import BitMasks, Boxes, BoxMode, Keypoints, PolygonMasks, RotatedBoxes
 class Basevisualizer(Visualizer):
 
     # def __init__(self,img_rgb, metadata=None, scale=1.0, instance_mode=ColorMode.IMAGE):
@@ -53,5 +56,48 @@ class Basevisualizer(Visualizer):
             assigned_colors=colors,
             alpha=alpha,
         )
+        return self.output
+
+    def draw_dataset_dict(self, dic):
+        """
+        Draw annotations/segmentaions in Detectron2 Dataset format.
+
+        Args:
+            dic (dict): annotation/segmentation data of one image, in Detectron2 Dataset format.
+
+        Returns:
+            output (VisImage): image object with visualizations.
+        """
+        annos = dic.get("annotations", None)
+        if annos:
+            if "segmentation" in annos[0]:
+                masks = [x["segmentation"] for x in annos]
+            boxes = [
+                BoxMode.convert(x["bbox"], x["bbox_mode"], BoxMode.XYXY_ABS)
+                if len(x["bbox"]) == 4
+                else x["bbox"]
+                for x in annos
+            ]
+
+            colors = None
+            category_ids = [x["category_id"] for x in annos]
+            if self._instance_mode == ColorMode.SEGMENTATION and self.metadata.get("thing_colors"):
+                colors = [
+                    self._jitter([x / 255 for x in self.metadata.thing_colors[c]])
+                    for c in category_ids
+                ]
+            names = self.metadata.get("thing_classes", None)
+            self.overlay_instances( boxes=boxes, masks=masks,  assigned_colors=colors
+            )
+
+        sem_seg = dic.get("sem_seg", None)
+        if sem_seg is None and "sem_seg_file_name" in dic:
+            with PathManager.open(dic["sem_seg_file_name"], "rb") as f:
+                sem_seg = Image.open(f)
+                sem_seg = np.asarray(sem_seg, dtype="uint8")
+        if sem_seg is not None:
+            self.draw_sem_seg(sem_seg, area_threshold=0, alpha=0.5)
+
+
         return self.output
 

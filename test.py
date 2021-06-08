@@ -5,6 +5,7 @@ import os
 from detectron2.config import get_cfg
 
 from segmentation_model.train_net import BasePredictor as bp
+from segmentation_model.visualizer import Basevisualizer as viz
 
 from detectron2.evaluation import COCOEvaluator, inference_on_dataset
 from detectron2.data import build_detection_test_loader, DatasetCatalog, build_detection_train_loader, MetadataCatalog
@@ -41,7 +42,7 @@ def inference_on_image(basepredictor,cfg,metadata,path):
 
         outputs = basepredictor(im)
 
-        v = Visualizer(im[:, :, ::-1],
+        v = viz(im[:, :, ::-1],
                        metadata=metadata,
                        scale=1,
                        instance_mode=ColorMode.IMAGE_BW
@@ -49,7 +50,7 @@ def inference_on_image(basepredictor,cfg,metadata,path):
                        )
         out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
 
-        visualizer = Visualizer(img, metadata=metadata, scale=1)
+        visualizer = viz(img, metadata=metadata, scale=1)
         gt = visualizer.draw_dataset_dict(d)
 
         ## Save ground_truth and inference
@@ -72,9 +73,9 @@ def inference_on_image(basepredictor,cfg,metadata,path):
         
 
 def main(inference = False):
-    validation_path = os.path.join(settings.data_directory, config.test_year + '_processed', config._test_version_name,
-                                   str(config.test_image_size), config._version_validation_)
-    register_coco_instances("veg_val_dataset", {}, os.path.join(validation_path, 'annotation', 'val'+config.test_year+'.json'),
+    validation_path = os.path.join(settings.data_directory, str(config.test_version_),config.test_year + '_processed', config._test_version_name,
+                                   str(config.test_image_size), config._version_train_)
+    register_coco_instances("veg_val_dataset", {}, os.path.join(validation_path, 'annotation', 'train'+config.test_year+'.json'),
                             os.path.join(validation_path, 'images'))
     cfg = get_cfg()
 
@@ -83,7 +84,7 @@ def main(inference = False):
     cfg.DATASETS.TEST = ("veg_val_dataset",)
     # cfg.MODEL.DEVICE = "cpu"
     cfg.MODEL.WEIGHTS = os.path.join(output_path, "model_final.pth")
-    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5
+    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.25
     # trainer = bt(cfg)
     predictor = bp(cfg)
     metadata = MetadataCatalog.get("veg_val_dataset")

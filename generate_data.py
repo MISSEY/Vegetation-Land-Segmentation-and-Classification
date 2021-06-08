@@ -38,7 +38,7 @@ year_processed = year + '_processed'
 
 image_size = cfg.data_generation_image_size
 
-denmark_tif = os.path.join(st.data_directory, cfg._tif_, year)
+denmark_tif = os.path.join(st.data_directory, cfg._tif_, '2020_small_crs_32632')
 
 
 def create_directory(path):
@@ -272,7 +272,7 @@ def save_vectors_in_coco_annotations():
             final_chip_dfs = dictionary_utils.load_pickle(pickle_path)
 
             # split into training and validation sets
-            train_chip_dfs, val_chip_dfs = coco_utils.train_test_split(final_chip_dfs, test_size=0.2, seed=1)
+            train_chip_dfs, val_chip_dfs = coco_utils.train_test_split(final_chip_dfs, test_size=0.1, seed=1)
 
             coco_train = coco_utils.format_coco(train_chip_dfs, image_size, image_size, denmark_veg)
             coco_val = coco_utils.format_coco(val_chip_dfs, image_size, image_size, denmark_veg)
@@ -312,14 +312,14 @@ def save_vectors_in_coco_annotations():
 
 if __name__ == '__main__':
     # 1. preprocess
-    # print("Preprocessing")
-    # preprocess_shape_files()
-    # print("Finish Preprocessing")
-    #
-    # print("Clipping on raster bounds")
-    # # 2. clip shape on raster bounds
-    # clip_shape_on_raster_bounds()
-    # print("finish Clipping on raster bounds")
+    print("Preprocessing")
+    preprocess_shape_files()
+    print("Finish Preprocessing")
+
+    print("Clipping on raster bounds")
+    # 2. clip shape on raster bounds
+    clip_shape_on_raster_bounds()
+    print("finish Clipping on raster bounds")
     #
     print("Vector crop")
     # 3. crop the vectors of defined image size

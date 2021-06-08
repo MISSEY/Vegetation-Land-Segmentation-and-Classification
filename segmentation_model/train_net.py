@@ -292,6 +292,9 @@ class BasePredictor(engine.DefaultPredictor):
     """
         Class overload from DefaultPredictor for more custom functionalities
     """
+    def __init__(self,cfg):
+        super().__init__(cfg)
+        self.aug = T.Resize((224,224),interp=Image.LANCZOS)
 
     def __call__(self, original_image):
         """
