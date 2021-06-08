@@ -93,7 +93,7 @@ def setup():
     cfg.SOLVER.BASE_LR = config.train_config["learning_rate"]  # pick a good LR
     cfg.SOLVER.MAX_ITER = config.train_config["epochs"]
     cfg.INPUT.MASK_FORMAT = "polygon"
-    cfg.MODEL.RPN.NMS_THRESH = 0.6
+    cfg.MODEL.RPN.NMS_THRESH = 0.7
 
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = calculate_num_classes(config._version_name)
     cfg.SOLVER.STEPS = config.train_config["solver_steps"]
@@ -122,6 +122,9 @@ def setup():
     if not config.train_config["train_from_scratch"]:
         cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(
             "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")  # Let training initialize from model zoo
+    else:
+        # scratch training
+        cfg.MODEL.WEIGHTS = ''
 
     # cfg.DATALOADER.FILTER_EMPTY_ANNOTATIONS = False
 
