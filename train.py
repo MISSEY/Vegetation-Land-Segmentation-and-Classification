@@ -94,6 +94,7 @@ def setup():
     cfg.SOLVER.MAX_ITER = config.train_config["epochs"]
     cfg.INPUT.MASK_FORMAT = "polygon"
     cfg.MODEL.RPN.NMS_THRESH = 0.7
+    cfg.MODEL.ROI_HEADS.NMS_THRESH_TEST = 0.3
 
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = calculate_num_classes(config._version_name)
     cfg.SOLVER.STEPS = config.train_config["solver_steps"]
