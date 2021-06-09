@@ -132,6 +132,7 @@ def format_coco(chip_dfs: Dict, chip_width: int, chip_height: int,df):
                                "mycategory_name": row['r_classes'],
                                "bbox": coco_bbox,
                                "area": row.geometry.area,
+                               "iscrowd": 0,
                                "segmentation": [coco_xy]}
                 cocojson.setdefault('annotations', []).append(annotation)
 
