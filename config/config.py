@@ -28,7 +28,7 @@ train_config = {
     "epochs" : 100000,
     "experiment_name" : 'resampling_factorNo',
     "experiment_value" : 0.001,  # from lvis paper
-    "freeze_at" : 0,
+    "freeze_at" : 2,
     "validation" : True,
     "learning_rate" : 0.0005,
     # model
@@ -39,7 +39,7 @@ train_config = {
     "checkpoint_period" : 25000,
     "eval_period" : 10000,
     "solver_steps" : (12000,25000,90000),
-    "train_from_scratch" : True,
+    "train_from_scratch" : False,
 }
 
 # raster image
