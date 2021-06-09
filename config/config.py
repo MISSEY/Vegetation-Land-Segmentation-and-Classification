@@ -32,10 +32,10 @@ train_config = {
     "validation" : True,
     "learning_rate" : 0.0005,
     # model
-    "model_name" : 'R_50_FPN',
+    "model_name" : 'R_101_FPN',
     "backbone_name" : 'build_resnet_fpn_backbone', # build_resnet_fpn_backbone (default) # build_resnet_backbone_custom
     "batch_size" : 256,
-    "experiment_number" : 90,
+    "experiment_number" : 91,
     "checkpoint_period" : 25000,
     "eval_period" : 10000,
     "solver_steps" : (12000,25000,90000),
