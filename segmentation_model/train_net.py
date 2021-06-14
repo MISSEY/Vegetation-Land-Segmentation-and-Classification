@@ -5,11 +5,11 @@ import datetime
 import logging
 import numpy as np
 import copy
+from torch import nn
 
 
 import detectron2.engine as engine
 from detectron2.utils.logger import log_every_n_seconds
-from detectron2.evaluation import COCOEvaluator
 import detectron2.utils.comm as comm
 from detectron2.data import DatasetMapper,build_detection_test_loader, build_detection_train_loader
 from detectron2.layers import paste_masks_in_image
@@ -20,6 +20,11 @@ from typing import Tuple, Dict
 from detectron2.modeling.backbone.build import build_backbone
 import detectron2.data.transforms as T
 from detectron2.data import detection_utils as utils
+from detectron2.engine import hooks as hk
+from detectron2.evaluation import COCOEvaluator, inference_on_dataset, DatasetEvaluators
+from detectron2.evaluation.testing import flatten_results_dict
+from detectron2.utils.comm import get_world_size, is_main_process
+from contextlib import ExitStack, contextmanager
 
 from config import config
 from PIL import Image
@@ -29,28 +34,62 @@ BYTES_PER_FLOAT = 4
 # determine it based on available resources.
 GPU_MEM_LIMIT = 1024 ** 3  # 1 GB memory limit
 
+@contextmanager
+def inference_context(model):
+    """
+    A context where the model is temporarily changed to eval mode,
+    and restored to previous mode afterwards.
+
+    Args:
+        model: a torch Module
+    """
+    training_mode = model.training
+    model.eval()
+    yield
+    model.train(training_mode)
+
 class Basehook(engine.HookBase):
-    def __init__(self, eval_period, model, data_loader):
+    def __init__(self, eval_period, model, data_loader,evaluator):
         self._model = model
         self._period = eval_period
         self._data_loader = data_loader
+        self.evaluator = evaluator
 
     def _do_loss_eval(self):
         # Copying inference_on_dataset from evaluator.py
-        total = len(self._data_loader)
-        num_warmup = min(5, total - 1)
+        # results = inference_on_dataset(self.model, self._data_loader, self.evaluator )
 
+        num_devices = get_world_size()
+        logger = logging.getLogger(__name__)
+        logger.info("Start inference on {} images".format(len(self._data_loader)))
+
+        total = len(self._data_loader)  # inference data loader must have a fixed length
+        # if self.evaluator is None:
+        #     # create a no-op evaluator
+        #     self.evaluator = DatasetEvaluators([])
+        # self.evaluator.reset()
+
+        num_warmup = min(5, total - 1)
         start_time = time.perf_counter()
         total_compute_time = 0
+        # with ExitStack() as stack:
+        #     if isinstance(self._model, nn.Module):
+        #         stack.enter_context(inference_context(self._model))
+        #     stack.enter_context(torch.no_grad())
+
         losses = []
         for idx, inputs in enumerate(self._data_loader):
             if idx == num_warmup:
                 start_time = time.perf_counter()
                 total_compute_time = 0
+
             start_compute_time = time.perf_counter()
+            outputs = self._model(inputs)
             if torch.cuda.is_available():
                 torch.cuda.synchronize()
             total_compute_time += time.perf_counter() - start_compute_time
+            self.evaluator.process(inputs, outputs)
+
             iters_after_start = idx + 1 - num_warmup * int(idx >= num_warmup)
             seconds_per_img = total_compute_time / iters_after_start
             if idx >= num_warmup * 2 or seconds_per_img > 5:
@@ -58,14 +97,59 @@ class Basehook(engine.HookBase):
                 eta = datetime.timedelta(seconds=int(total_seconds_per_img * (total - idx - 1)))
                 log_every_n_seconds(
                     logging.INFO,
-                    "Loss on Validation  done {}/{}. {:.4f} s / img. ETA={}".format(
+                    "Inference done {}/{}. {:.4f} s / img. ETA={}".format(
                         idx + 1, total, seconds_per_img, str(eta)
                     ),
                     n=5,
                 )
+
+            #Add custom loss
             loss_batch = self._get_loss(inputs)
             losses.append(loss_batch)
         mean_loss = np.mean(losses)
+
+        # Measure the time only for this worker (before the synchronization barrier)
+        total_time = time.perf_counter() - start_time
+        total_time_str = str(datetime.timedelta(seconds=total_time))
+        # NOTE this format is parsed by grep
+        logger.info(
+            "Total inference time: {} ({:.6f} s / img per device, on {} devices)".format(
+                total_time_str, total_time / (total - num_warmup), num_devices
+            )
+        )
+        total_compute_time_str = str(datetime.timedelta(seconds=int(total_compute_time)))
+        logger.info(
+            "Total inference pure compute time: {} ({:.6f} s / img per device, on {} devices)".format(
+                total_compute_time_str, total_compute_time / (total - num_warmup), num_devices
+            )
+        )
+
+        # results = self.evaluator.evaluate()
+        # # An evaluator may return None when not in main process.
+        # # Replace it by an empty dict instead to make it easier for downstream code to handle
+        # if results is None:
+        #     results = {}
+        #
+        # # copy from hooks.py
+        #
+        # assert isinstance(
+        #     results, dict
+        # ), "Eval function must return a dict. Got {} instead.".format(results)
+        #
+        # flattened_results = flatten_results_dict(results)
+        # for k, v in flattened_results.items():
+        #     try:
+        #         v = float(v)
+        #     except Exception as e:
+        #         raise ValueError(
+        #             "[EvalHook] eval_function should return a nested dict of float. "
+        #             "Got '{}: {}' instead.".format(k, v)
+        #         ) from e
+        # self.trainer.storage.put_scalars(**flattened_results, smoothing_hint=False)
+
+        # Evaluation may take different time among workers.
+        # A barrier make them start the next iteration together.
+
         self.trainer.storage.put_scalar('validation_loss', mean_loss)
         comm.synchronize()
 
@@ -208,6 +292,9 @@ class BasePredictor(engine.DefaultPredictor):
     """
         Class overload from DefaultPredictor for more custom functionalities
     """
+    def __init__(self,cfg):
+        super().__init__(cfg)
+        self.aug = T.Resize((224,224),interp=Image.LANCZOS)
 
     def __call__(self, original_image):
         """
@@ -241,7 +328,7 @@ def custom_mapper(dataset_dict):
     dataset_dict = copy.deepcopy(dataset_dict)  # it will be modified by code below
     image = utils.read_image(dataset_dict["file_name"], format="BGR")
     augs = T.AugmentationList([
-        T.Resize((224,224),interp=Image.LANCZOS),
+        # T.Resize((224,224),interp=Image.LANCZOS),
         # T.RandomBrightness(0.5, 2),
         # T.RandomContrast(0.5, 2),
         # T.RandomSaturation(0.5, 2),
@@ -266,29 +353,49 @@ def custom_mapper(dataset_dict):
 class BaseTrainer(engine.DefaultTrainer):
 
 
+    def __init__(self, cfg, local_config):
+        self.local_config = local_config
+        self.validation_period = local_config["eval_period"]
+        super().__init__(cfg)
+
     @classmethod
     def build_train_loader(cls, cfg):
         return build_detection_train_loader(cfg, mapper=custom_mapper)
 
     @classmethod
-    def build_evaluator(cls, cfg, dataset_name, output_folder=None):
-        if config.validation:
+    def build_evaluator(self, cfg, dataset_name, output_folder=None):
+        if config.train_config["validation"]:
             if output_folder is None:
                 output_folder = os.path.join(cfg.OUTPUT_DIR, "inference")
             return COCOEvaluator(dataset_name, cfg, True, output_folder)
 
+    @classmethod
+    def build_test_loader(cls, cfg, dataset_name):
+        """
+        Returns:
+            iterable
+
+        It now calls :func:`detectron2.data.build_detection_test_loader`.
+        Overwrite it if you'd like a different data loader.
+        """
+        return build_detection_test_loader(cfg, dataset_name,mapper=custom_mapper)
+
     def build_hooks(self):
         hooks = super().build_hooks()
-
-        if(config.validation):
+        # for idx, h in enumerate(hooks):
+        #     if isinstance(h, hk.EvalHook):
+        #         k = idx
+        # if(k):
+        #     del hooks[k]
+        if self.local_config["validation"]:
             hooks.insert(-1, Basehook(
-                self.cfg.TEST.EVAL_PERIOD,
+                self.validation_period,
                 self.model,
-                build_detection_test_loader(
+                self.build_test_loader(
                     self.cfg,
-                    self.cfg.DATASETS.TEST[0],
-                    DatasetMapper(self.cfg, True)
-                )
+                    self.cfg.DATASETS.TEST[0]
+                ),
+                self.build_evaluator(self.cfg, self.cfg.DATASETS.TEST[0])
             ))
             return hooks
 
