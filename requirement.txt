@@ -1,5 +1,6 @@
+
 jupyterlab
-torch torchvision torchaudio
+
 scipy
 sklearn
 pandas

@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------------
 
 # debug
-debug = False
+debug = True
 
 # Directories names
 _data_ = 'Data'
@@ -11,7 +11,7 @@ _data_ = 'Data'
 # Below directories should be inside _data_ , otherwise give full path instead of names
 _raw_shape_directory = 'Raw_shape_files'
 _tif_ = 'Denmark_tif'
-_version_ = str(5)
+_version_ = str(1)
 _version_name ='v_whole_summer_winter_2020'
 _version_processed_shape_files = 'processed_shape_files' # Each version has unique files depending on category. ,
 # It must be inside version name
@@ -34,12 +34,24 @@ train_config = {
     # model
     "model_name" : 'R_101_FPN',
     "backbone_name" : 'build_resnet_fpn_backbone', # build_resnet_fpn_backbone (default) # build_resnet_backbone_custom
+    "architecture_name" : "GeneralizedRCNN",  # for FCIS implementation (default) #GeneralizedRCNN,    GeneralizedFCIS
     "batch_size" : 256,
     "experiment_number" : 91,
     "checkpoint_period" : 25000,
     "eval_period" : 10000,
     "solver_steps" : (12000,25000,90000),
     "train_from_scratch" : False,
+}
+fcis_model = {
+    'flag':False,
+    'RPN_NMS_THRESH' : 0.7,
+    'RPN_IN_FEATURES' : ['res5'],
+    "backbone_name" : 'build_resnet_backbone_custom',
+    "architecture_name": "FCISProposalNetwork", # GeneralizedFCIS, #FCISProposalNetwork
+    "ANCHOR_GENERATOR.SIZES" : [[32]],
+    "MODEL.RESNETS.NORM" : "BN",
+    "MODEL.ROI_BOX_HEAD.POOLER_TYPE":"ROIPool",
+
 }
 
 # raster image

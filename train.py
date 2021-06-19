@@ -4,8 +4,6 @@ from detectron2.utils.logger import setup_logger
 
 setup_logger()
 
-from shutil import copyfile
-
 import os
 
 from detectron2 import model_zoo
@@ -17,11 +15,11 @@ from common import dictionary_utils
 
 from detectron2.data.datasets import register_coco_instances
 
-from detectron2.engine import default_argument_parser, default_setup, launch
 from segmentation_model.train_net import BaseTrainer as bt
-from backbone import resnet
 
 import yaml
+
+import modeling
 
 def get_path():
     """
@@ -68,7 +66,7 @@ def register_data_set():
 
 def calculate_num_classes(version_name):
     train_path, validation_path = get_path()
-    annon = dictionary_utils.load_json(os.path.join(validation_path, 'annotation', 'val' + config.train_config["train_year"] + '.json'))
+    annon = dictionary_utils.load_json(os.path.join(train_path, 'annotation', 'train' + config.train_config["train_year"] + '.json'))
     classes = len(annon['categories'])
     return(classes)
 
@@ -104,6 +102,7 @@ def setup():
     cfg.INPUT.MIN_SIZE_TEST = 0
 
     cfg.MODEL.BACKBONE.NAME = config.train_config["backbone_name"]
+    cfg.MODEL.META_ARCHITECTURE = config.train_config["architecture_name"]
     cfg.MODEL.BACKBONE.FREEZE_AT = config.train_config["freeze_at"]
 
     if config.debug:
@@ -125,9 +124,21 @@ def setup():
             "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")  # Let training initialize from model zoo
     else:
         # scratch training
-        cfg.MODEL.WEIGHTS = ''
+        if not config.fcis_model['flag']:
+            cfg.MODEL.WEIGHTS = ''
 
     # cfg.DATALOADER.FILTER_EMPTY_ANNOTATIONS = False
+
+    if config.fcis_model['flag']:
+        cfg.MODEL.BACKBONE.NAME = config.fcis_model["backbone_name"]
+        cfg.MODEL.META_ARCHITECTURE = config.fcis_model["architecture_name"]
+        cfg.MODEL.RPN.IN_FEATURES = config.fcis_model["RPN_IN_FEATURES"]
+        cfg.MODEL.ANCHOR_GENERATOR.SIZES =config.fcis_model["ANCHOR_GENERATOR.SIZES"]
+        cfg.MODEL.RESNETS.NORM = config.fcis_model["MODEL.RESNETS.NORM"]
+        cfg.MODEL.ROI_BOX_HEAD.POOLER_TYPE = config.fcis_model["MODEL.ROI_BOX_HEAD.POOLER_TYPE"]
+
+
+
 
     return cfg
 
