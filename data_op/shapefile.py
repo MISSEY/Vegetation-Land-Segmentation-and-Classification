@@ -13,6 +13,9 @@ from geopandas import GeoDataFrame as GDF
 from shapely.geometry import Polygon, MultiPolygon
 
 class Shape_Extractor:
+    """
+    Shape extraction on geopandas dataframe
+    """
 
     def __init__(self, shape_file=None,raster_file=None):
         self.shape_file = shape_file

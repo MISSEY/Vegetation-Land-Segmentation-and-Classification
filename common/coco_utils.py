@@ -143,7 +143,7 @@ def format_coco(chip_dfs: Dict, chip_width: int, chip_height: int,df):
 
 def get_categories(df):
     """
-
+    Get class ids
     :param df:
     :return:
     """
@@ -205,7 +205,13 @@ def plot_coco(inpath_json, inpath_image_folder, start=0, end=2):
         patches = [PolygonPatch(p, ec='r', fill=False, alpha=1, lw=0.7, zorder=1) for p in mp]
         plt.gca().add_collection(PatchCollection(patches, match_original=True))
         plt.show()
+
+
+
 class CocoDataset():
+    """
+    Class for visualisation of coco dataset
+    """
     def __init__(self, annotation_path, image_dir):
         self.annotation_path = annotation_path
         self.image_dir = image_dir

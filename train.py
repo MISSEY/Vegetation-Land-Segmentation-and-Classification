@@ -23,6 +23,7 @@ import modeling
 
 def get_path():
     """
+    Get path for train and validation dataset
 
     :return:
     """
@@ -54,6 +55,11 @@ def get_path():
 
 
 def register_data_set():
+    """
+    Register coco dataset on Detectron2
+    Returns:
+
+    """
     train_path,validation_path = get_path()
 
     register_coco_instances("veg_train_dataset", {},
@@ -136,8 +142,6 @@ def setup():
         cfg.MODEL.ANCHOR_GENERATOR.SIZES =config.fcis_model["ANCHOR_GENERATOR.SIZES"]
         cfg.MODEL.RESNETS.NORM = config.fcis_model["MODEL.RESNETS.NORM"]
         cfg.MODEL.ROI_BOX_HEAD.POOLER_TYPE = config.fcis_model["MODEL.ROI_BOX_HEAD.POOLER_TYPE"]
-
-
 
 
     return cfg
