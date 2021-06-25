@@ -23,26 +23,26 @@ _version_crop_images_ = 'cropped_images'
 train_config = {
     'train_year' : '2020',
     # change version name while training
-    'train_image_size' : 128,
+    'train_image_size' : 224,
     'instance_per_image_filter' : 2000,
-    "epochs" : 100000,
+    "epochs" : 20000,
     "experiment_name" : 'resampling_factor',
     "experiment_value" : 0.001,  # from lvis paper
-    "freeze_at" : 0,
+    "freeze_at" : 2,
     "validation" : True,
-    "learning_rate" : 0.000001,
+    "learning_rate" : 0.001,
     # model
     "FPN" : False,
     "model_name" : 'R_101_X_FPN',
     "backbone_name" : 'build_resnet_fpn_backbone', # build_resnet_fpn_backbone (default) # build_resnet_backbone_custom
     "architecture_name" : "GeneralizedRCNN",  # for FCIS implementation (default) #GeneralizedRCNN,    GeneralizedFCIS
     "config_file" : "COCO-InstanceSegmentation/mask_rcnn_X_101_32x8d_FPN_3x.yaml",
-    "batch_size" : 2048,
-    "experiment_number" : 114,
+    "batch_size" : 256,
+    "experiment_number" : 115,
     "checkpoint_period" : 10000,
-    "eval_period" : 50000,
-    "solver_steps" : (20000,50000,90000),
-    "train_from_scratch" : True,
+    "eval_period" : 5000,
+    "solver_steps" : (2000,5000,15000),
+    "train_from_scratch" : False,
 }
 fcis_model = {
     'flag':False,
