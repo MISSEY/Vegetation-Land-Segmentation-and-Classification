@@ -40,7 +40,7 @@ train_config = {
     "batch_size" : 2048,
     "experiment_number" : 105,
     "checkpoint_period" : 5000,
-    "eval_period" : 10000,
+    "eval_period" : 5000,
     "solver_steps" : (2000,5000,15000),
     "train_from_scratch" : False,
 }
