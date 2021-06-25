@@ -106,7 +106,7 @@ def setup():
 
     # To stop auto resize
     cfg.INPUT.MIN_SIZE_TEST = 0
-    
+
     if(config.train_config["FPN"]):
         cfg.MODEL.BACKBONE.NAME = config.train_config["backbone_name"]
         cfg.MODEL.META_ARCHITECTURE = config.train_config["architecture_name"]
@@ -129,6 +129,7 @@ def setup():
 
     if not config.train_config["train_from_scratch"]:
         cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(config.train_config["config_file"])  # Let training initialize from model zoo
+        cfg.MODEL.BACKBONE.FREEZE_AT = 0
     else:
         # scratch training
         if not config.fcis_model['flag']:
