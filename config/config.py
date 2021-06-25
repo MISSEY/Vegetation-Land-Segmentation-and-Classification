@@ -30,7 +30,7 @@ train_config = {
     "experiment_value" : 0.001,  # from lvis paper
     "freeze_at" : 0,
     "validation" : True,
-    "learning_rate" : 0.001,
+    "learning_rate" : 0.000001,
     # model
     "FPN" : False,
     "model_name" : 'R_101_X_FPN',
@@ -38,11 +38,11 @@ train_config = {
     "architecture_name" : "GeneralizedRCNN",  # for FCIS implementation (default) #GeneralizedRCNN,    GeneralizedFCIS
     "config_file" : "COCO-InstanceSegmentation/mask_rcnn_X_101_32x8d_FPN_3x.yaml",
     "batch_size" : 2048,
-    "experiment_number" : 113,
-    "checkpoint_period" : 5000,
-    "eval_period" : 5000,
-    "solver_steps" : (2000,5000,15000),
-    "train_from_scratch" : False,
+    "experiment_number" : 114,
+    "checkpoint_period" : 10000,
+    "eval_period" : 50000,
+    "solver_steps" : (20000,50000,90000),
+    "train_from_scratch" : True,
 }
 fcis_model = {
     'flag':False,
