@@ -28,19 +28,21 @@ train_config = {
     "epochs" : 20000,
     "experiment_name" : 'resampling_factor',
     "experiment_value" : 0.001,  # from lvis paper
-    "freeze_at" : 0,
+    "freeze_at" : 2,
     "validation" : True,
     "learning_rate" : 0.001,
     # model
+    "FPN" : True,
     "model_name" : 'R_101_FPN',
     "backbone_name" : 'build_resnet_fpn_backbone', # build_resnet_fpn_backbone (default) # build_resnet_backbone_custom
     "architecture_name" : "GeneralizedRCNN",  # for FCIS implementation (default) #GeneralizedRCNN,    GeneralizedFCIS
-    "batch_size" : 256,
-    "experiment_number" : 100,
+    "config_file" : "COCO-InstanceSegmentation/mask_rcnn_R_101_FPN_3x.yaml",
+    "batch_size" : 512,
+    "experiment_number" : 101,
     "checkpoint_period" : 5000,
     "eval_period" : 5000,
     "solver_steps" : (2000,5000,15000),
-    "train_from_scratch" : True,
+    "train_from_scratch" : False,
 }
 fcis_model = {
     'flag':False,

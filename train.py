@@ -85,7 +85,7 @@ def setup():
     register_data_set()
 
     cfg = get_cfg()
-    cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_101_FPN_3x.yaml"))
+    cfg.merge_from_file(model_zoo.get_config_file(config.train_config["config_file"]))
     # cfg.merge_from_file(os.path.join("config.yaml"))
     cfg.DATASETS.TRAIN = ("veg_train_dataset",)
     # cfg.DATASETS.TRAIN = ("street_val_dataset",)
@@ -106,9 +106,11 @@ def setup():
 
     # To stop auto resize
     cfg.INPUT.MIN_SIZE_TEST = 0
+    
+    if(config.train_config["FPN"]):
+        cfg.MODEL.BACKBONE.NAME = config.train_config["backbone_name"]
+        cfg.MODEL.META_ARCHITECTURE = config.train_config["architecture_name"]
 
-    cfg.MODEL.BACKBONE.NAME = config.train_config["backbone_name"]
-    cfg.MODEL.META_ARCHITECTURE = config.train_config["architecture_name"]
     cfg.MODEL.BACKBONE.FREEZE_AT = config.train_config["freeze_at"]
 
     if config.debug:
@@ -126,8 +128,7 @@ def setup():
         cfg.DATALOADER.REPEAT_THRESHOLD = config.train_config["experiment_value"]
 
     if not config.train_config["train_from_scratch"]:
-        cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(
-            "COCO-InstanceSegmentation/mask_rcnn_R_101_FPN_3x.yaml")  # Let training initialize from model zoo
+        cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(config.train_config["config_file"])  # Let training initialize from model zoo
     else:
         # scratch training
         if not config.fcis_model['flag']:
