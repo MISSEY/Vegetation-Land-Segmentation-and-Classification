@@ -25,7 +25,7 @@ train_config = {
     # change version name while training
     'train_image_size' : 128,
     'instance_per_image_filter' : 2000,
-    "epochs" : 20000,
+    "epochs" : 100000,
     "experiment_name" : 'resampling_factor',
     "experiment_value" : 0.001,  # from lvis paper
     "freeze_at" : 0,
