@@ -23,7 +23,7 @@ _version_crop_images_ = 'cropped_images'
 train_config = {
     'train_year' : '2020',
     # change version name while training
-    'train_image_size' : 224,
+    'train_image_size' : 128,
     'instance_per_image_filter' : 2000,
     "epochs" : 20000,
     "experiment_name" : 'resampling_factor',
@@ -33,12 +33,14 @@ train_config = {
     "learning_rate" : 0.001,
     # model
     "FPN" : False,
+    "PIXEL_MEAN" : [25.859381755560438, 33.39317841166565,28.439379417812592],
+    "PIXEL_STD" : [9.454635453006942, 11.255133601289831, 15.095056038238923],
     "model_name" : 'R_50_FPN',
     "backbone_name" : 'build_resnet_fpn_backbone', # build_resnet_fpn_backbone (default) # build_resnet_backbone_custom
     "architecture_name" : "GeneralizedRCNN",  # for FCIS implementation (default) #GeneralizedRCNN,    GeneralizedFCIS
     "config_file" : "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml",
     "batch_size" : 512,
-    "experiment_number" : 123,
+    "experiment_number" : 200,
     "checkpoint_period" : 10000,
     "eval_period" : 5000,
     "solver_steps" : (2000,5000,15000),
