@@ -12,7 +12,7 @@ _data_ = 'Data'
 _raw_shape_directory = 'Raw_shape_files'
 _tif_ = 'Denmark_tif'
 _version_ = str(6)
-_version_name ='v_whole_summer_winter_2020'
+_version_name ='v_whole_summer_winter_2020_singleclass'
 _version_processed_shape_files = 'processed_shape_files' # Each version has unique files depending on category. ,
 # It must be inside version name
 _version_train_ = 'train'
@@ -39,7 +39,7 @@ train_config = {
     "backbone_name" : 'build_resnet_fpn_backbone', # build_resnet_fpn_backbone (default) # build_resnet_backbone_custom
     "architecture_name" : "GeneralizedRCNN",  # for FCIS implementation (default) #GeneralizedRCNN,    GeneralizedFCIS
     "config_file" : "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml",
-    "batch_size" : 512,
+    "batch_size" : 2048,
     "experiment_number" : 200,
     "checkpoint_period" : 10000,
     "eval_period" : 5000,
