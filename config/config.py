@@ -33,7 +33,7 @@ train_config = {
     "learning_rate" : 0.0001,
     # model
     "FPN" : False,
-    "PIXEL_MEAN" : [46.0335693359375, 66.78961181640625, 61.3616943359375],
+    "PIXEL_MEAN" : [91.55, 107.21, 116.17],
     "PIXEL_STD" : [9.454635453006942, 11.255133601289831, 15.095056038238923],
     "model_name" : 'R_50_FPN',
     "backbone_name" : 'build_resnet_fpn_backbone', # build_resnet_fpn_backbone (default) # build_resnet_backbone_custom
