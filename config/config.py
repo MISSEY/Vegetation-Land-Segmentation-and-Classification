@@ -12,7 +12,7 @@ _data_ = 'Data'
 _raw_shape_directory = 'Raw_shape_files'
 _tif_ = 'Denmark_tif'
 _version_ = str(6)
-_version_name ='v_whole_summer_winter_2020_singleclass'
+_version_name ='v_whole_summer_winter_2020'
 _version_processed_shape_files = 'processed_shape_files' # Each version has unique files depending on category. ,
 # It must be inside version name
 _version_train_ = 'train'
@@ -25,26 +25,26 @@ train_config = {
     # change version name while training
     'train_image_size' : 224,
     'instance_per_image_filter' : 2000,
-    "epochs" : 100000,
+    "epochs" : 20000,
     "experiment_name" : 'resampling_factor',
     "experiment_value" : 0.001,  # from lvis paper
-    "freeze_at" : 0,
+    "freeze_at" : 2,
     "validation" : True,
-    "learning_rate" : 0.000001,
+    "learning_rate" : 0.0001,
     # model
     "FPN" : False,
     "PIXEL_MEAN" : [28.71, 33.70, 26.07],
     "PIXEL_STD" : [9.454635453006942, 11.255133601289831, 15.095056038238923],
-    "model_name" : 'R_50_FPN',
+    "model_name" : 'R_50_C4',
     "backbone_name" : 'build_resnet_fpn_backbone', # build_resnet_fpn_backbone (default) # build_resnet_backbone_custom
     "architecture_name" : "GeneralizedRCNN",  # for FCIS implementation (default) #GeneralizedRCNN,    GeneralizedFCIS
-    "config_file" : "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml",
+    "config_file" : "COCO-InstanceSegmentation/mask_rcnn_R_50_C4_3x.yaml",
     "batch_size" : 2048,
-    "experiment_number" : 124,
-    "checkpoint_period" : 50000,
-    "eval_period" : 10000,
-    "solver_steps" : (20000,50000,90000),
-    "train_from_scratch" : True,
+    "experiment_number" : 125,
+    "checkpoint_period" : 10000,
+    "eval_period" : 5000,
+    "solver_steps" : (2000,5000,15000),
+    "train_from_scratch" : False,
 }
 fcis_model = {
     'flag':False,
