@@ -35,12 +35,12 @@ train_config = {
     "FPN" : False,
     "PIXEL_MEAN" : [28.71, 33.70, 26.07],
     "PIXEL_STD" : [9.454635453006942, 11.255133601289831, 15.095056038238923],
-    "model_name" : 'R_101_FPN',
+    "model_name" : 'R_50_FPN',
     "backbone_name" : 'build_resnet_fpn_backbone', # build_resnet_fpn_backbone (default) # build_resnet_backbone_custom
     "architecture_name" : "GeneralizedRCNN",  # for FCIS implementation (default) #GeneralizedRCNN,    GeneralizedFCIS
-    "config_file" : "COCO-InstanceSegmentation/mask_rcnn_R_101_FPN_3x.yaml",
+    "config_file" : "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml",
     "batch_size" : 2048,
-    "experiment_number" : 130,
+    "experiment_number" : 131,
     "checkpoint_period" : 10000,
     "eval_period" : 5000,
     "solver_steps" : (2000,5000,15000),

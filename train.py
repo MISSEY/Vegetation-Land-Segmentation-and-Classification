@@ -107,7 +107,7 @@ def setup():
     # To stop auto resize
     cfg.INPUT.MIN_SIZE_TEST = 0
 
-    cfg.MODEL.PIXEL_MEAN = config.train_config["PIXEL_MEAN"]
+    # cfg.MODEL.PIXEL_MEAN = config.train_config["PIXEL_MEAN"]
     # cfg.MODEL.PIXEL_STD = config.train_config["PIXEL_STD"]
 
     if(config.train_config["FPN"]):
