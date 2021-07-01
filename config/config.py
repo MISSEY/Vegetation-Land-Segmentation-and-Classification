@@ -12,7 +12,7 @@ _data_ = 'Data'
 _raw_shape_directory = 'Raw_shape_files'
 _tif_ = 'Denmark_tif'
 _version_ = str(6)
-_version_name ='v_Apr_Jun'
+_version_name ='v_Jan_Mar'
 _version_processed_shape_files = 'processed_shape_files' # Each version has unique files depending on category. ,
 # It must be inside version name
 _version_train_ = 'train'
@@ -35,12 +35,12 @@ train_config = {
     "FPN" : False,
     "PIXEL_MEAN" : [28.71, 33.70, 26.07],
     "PIXEL_STD" : [9.454635453006942, 11.255133601289831, 15.095056038238923],
-    "model_name" : 'R_50_FPN', # R_101_X_FPN, R_101_FPN, R_50_FPN
+    "model_name" : 'R_101_X_FPN', # R_101_X_FPN, R_101_FPN, R_50_FPN
     "backbone_name" : 'build_resnet_fpn_backbone', # build_resnet_fpn_backbone (default) # build_resnet_backbone_custom
     "architecture_name" : "GeneralizedRCNN",  # for FCIS implementation (default) #GeneralizedRCNN,    GeneralizedFCIS
-    "config_file" : "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml", # mask_rcnn_X_101_32x8d_FPN_3x , mask_rcnn_R_101_FPN_3x , mask_rcnn_R_50_FPN_3x
+    "config_file" : "COCO-InstanceSegmentation/mask_rcnn_X_101_32x8d_FPN_3x.yaml", # mask_rcnn_X_101_32x8d_FPN_3x , mask_rcnn_R_101_FPN_3x , mask_rcnn_R_50_FPN_3x
     "batch_size" : 2048,
-    "experiment_number" : 152,
+    "experiment_number" : 159,
     "checkpoint_period" : 10000,
     "eval_period" : 5000,
     "solver_steps" : (2000,5000,15000),
