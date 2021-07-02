@@ -2,7 +2,7 @@ git clone https://github.com/msracver/FCIS.git ## clone official FCIS
 cd FCIS
 sh init.sh ## intialise all necessary files
 
-# copy the edited python files in cloned repo
+# copy the edited python files in cloned repository
 rm lib/dataset/coco.py
 cp /home/smishra/fcis/1/FCIS_mxnet/lib/dataset/coco.py lib/dataset/
 
