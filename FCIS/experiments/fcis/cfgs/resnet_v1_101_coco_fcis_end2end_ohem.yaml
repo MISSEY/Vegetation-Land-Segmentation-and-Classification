@@ -2,7 +2,7 @@
 MXNET_VERSION: "mxnet"
 output_path: "/netscratch/smishra/thesis/output/fcis/v_whole_summer_winter_2020/128"
 symbol: resnet_v1_101_fcis
-gpus: '0,1'
+gpus: '0'
 CLASS_AGNOSTIC: true
 SCALES:
 - 600
