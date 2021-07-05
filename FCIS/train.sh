@@ -3,6 +3,10 @@ git clone https://github.com/msracver/FCIS.git ## clone official FCIS
 cd FCIS
 sh init.sh ## intialise all necessary files
 
+## Only for testing
+rm experiments/fcis/fcis_end2end_train_test.py
+cp /home/smishra/fcis/1/Vegetation-Land-Segmentation-and-Classification/FCIS/experiments/fcis/fcis_end2end_train_test.py experiments/fcis/
+
 # copy the edited python files in cloned repository
 rm lib/dataset/coco.py
 cp /home/smishra/fcis/1/Vegetation-Land-Segmentation-and-Classification/FCIS/lib/dataset/coco.py lib/dataset/
