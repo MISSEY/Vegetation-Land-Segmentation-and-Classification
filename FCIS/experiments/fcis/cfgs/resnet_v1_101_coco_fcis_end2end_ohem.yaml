@@ -1,6 +1,6 @@
 ---
 MXNET_VERSION: "mxnet"
-output_path: "/netscratch/smishra/thesis/output/fcis/v_Jan_Mar/128"
+output_path: "/netscratch/smishra/thesis/output/fcis/v_Apr_Jun/128"
 symbol: resnet_v1_101_fcis
 gpus: '0'
 CLASS_AGNOSTIC: true
@@ -51,12 +51,12 @@ network:
   - 32
   NUM_ANCHORS: 12
 dataset:
-  NUM_CLASSES: 5
+  NUM_CLASSES: 7
   dataset: coco
-  dataset_path: "/netscratch/smishra/thesis/vegetation_dataset/fcis/6/2020_processed/v_Jan_Mar/128"
-  image_set: train2020
-  root_path: "/netscratch/smishra/thesis/vegetation_dataset/fcis/6/2020_processed/v_Jan_Mar/128"
-  test_image_set: val2020
+  dataset_path: "/netscratch/smishra/thesis/vegetation_dataset/fcis/7/2019_processed/v_Apr_Jun/128"
+  image_set: train2019
+  root_path: "/netscratch/smishra/thesis/vegetation_dataset/fcis/7/2019_processed/v_Apr_Jun/128"
+  test_image_set: val2019
   proposal: rpn
 TRAIN:
   lr: 0.0005
@@ -157,7 +157,7 @@ TEST:
   PROPOSAL_MIN_SIZE: 2
   # RCNN nms
   NMS: 0.3
-  test_epoch: 7
+  test_epoch: 12
   # ITER 2 & mask merge
   ITER: 2
   MIN_DROP_SIZE: 2
