@@ -167,7 +167,7 @@ config.TEST.USE_GPU_MASK_MERGE = False
 config.TEST.MASK_MERGE_THRESH = 0.5
 
 # version_name_and _year
-config.versionnameandyear = 'whole_summer_winter_2019'
+config.versionnameandyear = 'whole_summer_winter_2019_singleclass'
 config.image_size = '128'
 
 
