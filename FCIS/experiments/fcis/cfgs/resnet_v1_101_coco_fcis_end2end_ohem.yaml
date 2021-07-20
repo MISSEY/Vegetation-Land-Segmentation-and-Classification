@@ -53,10 +53,10 @@ network:
 dataset:
   NUM_CLASSES: 2
   dataset: coco
-  dataset_path: "/netscratch/smishra/thesis/vegetation_dataset/fcis/7/2019_processed/v_whole_summer_winter_2019_singleclass/128"
-  image_set: train2019
-  root_path: "/netscratch/smishra/thesis/vegetation_dataset/fcis/7/2019_processed/v_whole_summer_winter_2019_singleclass/128"
-  test_image_set: val2019
+  dataset_path: "/netscratch/smishra/thesis/vegetation_dataset/fcis/6/2020_processed/v_whole_summer_winter_2020_singleclass/128"
+  image_set: train2020
+  root_path: "/netscratch/smishra/thesis/vegetation_dataset/fcis/6/2020_processed/v_whole_summer_winter_2020_singleclass/128"
+  test_image_set: val2020
   proposal: rpn
 TRAIN:
   lr: 0.0005
