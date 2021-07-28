@@ -39,7 +39,7 @@ train_config = {
     "backbone_name" : 'build_resnet_fpn_backbone', # build_resnet_fpn_backbone (default) # build_resnet_backbone_custom
     "architecture_name" : "GeneralizedRCNN",  # for FCIS implementation (default) #GeneralizedRCNN,    GeneralizedFCIS
     "config_file" : "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml", # mask_rcnn_X_101_32x8d_FPN_3x , mask_rcnn_R_101_FPN_3x , mask_rcnn_R_50_FPN_3x
-    "batch_size" : 2048,
+    "batch_size" : 512,
     "experiment_number" : 300,
     "checkpoint_period" : 10000,
     "eval_period" : 5000,
