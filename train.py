@@ -111,6 +111,7 @@ def setup():
     cfg.MODEL.RPN.PRE_NMS_TOPK_TRAIN = config.train_config["MODEL.RPN.PRE_NMS_TOPK_TRAIN"]
     cfg.MODEL.RPN.PRE_NMS_TOPK_TEST = config.train_config["MODEL.RPN.PRE_NMS_TOPK_TEST"]
     cfg.SOLVER.WARMUP_ITERS = config.train_config["SOLVER.WARMUP_ITERS"]
+    cfg.TEST.DETECTIONS_PER_IMAGE = 200
     # cfg.MODEL.PIXEL_STD = config.train_config["PIXEL_STD"]
 
     if(config.train_config["FPN"]):
