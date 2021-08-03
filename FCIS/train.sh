@@ -1,13 +1,24 @@
-cd FCIS
+"""
+This is file is configured for training on DFKI cluster, please change the initials in the absolute path according to your
+system.
+"""
+
+## Run the file for training the FCIS, before training, one must change below files in this repo according to training:
+# 1. FCIS/experiments/fcis/cfgs/resnet_v1_101_coco_fcis_end2end_ohem.yaml
+# 2. FCIS/fcis/config/config.py
+
+# Clone the official repo of FCIS
 git clone https://github.com/msracver/FCIS.git ## clone official FCIS
 cd FCIS
 sh init.sh ## intialise all necessary files
 
-## Only for testing
-rm experiments/fcis/fcis_end2end_train_test.py
-cp /home/smishra/fcis/1/Vegetation-Land-Segmentation-and-Classification/FCIS/experiments/fcis/fcis_end2end_train_test.py experiments/fcis/
+# copy the customised python files in official cloned repository
 
-# copy the edited python files in cloned repository
+# Uncomment the below line if you changed the fcis_end2end_train_test.py to only test the model on docker
+#rm experiments/fcis/fcis_end2end_train_test.py
+#cp /home/smishra/fcis/1/Vegetation-Land-Segmentation-and-Classification/FCIS/experiments/fcis/fcis_end2end_train_test.py experiments/fcis/
+
+
 rm lib/dataset/coco.py
 cp /home/smishra/fcis/1/Vegetation-Land-Segmentation-and-Classification/FCIS/lib/dataset/coco.py lib/dataset/
 
@@ -27,9 +38,10 @@ rm experiments/fcis/cfgs/resnet_v1_101_coco_fcis_end2end_ohem.yaml
 cp /home/smishra/fcis/1/Vegetation-Land-Segmentation-and-Classification/FCIS/experiments/fcis/cfgs/resnet_v1_101_coco_fcis_end2end_ohem.yaml experiments/fcis/cfgs/
 
 cat experiments/fcis/cfgs/resnet_v1_101_coco_fcis_end2end_ohem.yaml
-pwd
 
 rm fcis/config/config.py
 cp /home/smishra/fcis/1/Vegetation-Land-Segmentation-and-Classification/FCIS/fcis/config/config.py fcis/config/
 
+
+## Run the python script for training and testing using configuration yaml file
 python experiments/fcis/fcis_end2end_train_test.py --cfg "experiments/fcis/cfgs/resnet_v1_101_coco_fcis_end2end_ohem.yaml"
