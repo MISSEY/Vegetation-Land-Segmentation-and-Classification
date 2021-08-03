@@ -27,6 +27,8 @@ def get_path():
 
     :return:
     """
+
+    # for debugging
     if (config.debug):
 
         train_path = os.path.join(settings.data_directory, str(config._version_),
