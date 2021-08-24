@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------------
 
 # debug
-debug = False
+debug = True
 
 # Directories names
 _data_ = 'Data'
@@ -23,12 +23,12 @@ _version_crop_images_ = 'cropped_images'
 train_config = {
     'train_year' : '2020',
     # change version name while training
-    'train_image_size' : 128,
+    'train_image_size' : 224,
     'instance_per_image_filter' : 2000,
     "epochs" : 20000,
     "experiment_name" : 'resampling_factorNo',
     "experiment_value" : 0.001,  # from lvis paper
-    "freeze_at" : 0,
+    "freeze_at" : 2,
     "validation" : True,
     "learning_rate" : 0.0001,
     # model

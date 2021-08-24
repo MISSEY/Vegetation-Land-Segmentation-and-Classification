@@ -2,7 +2,7 @@
 MXNET_VERSION: "mxnet"
 output_path: "/netscratch/smishra/thesis/output/fcis/v_whole_summer_winter_2020_singleclass/128"
 symbol: resnet_v1_101_fcis
-gpus: '0,1'
+gpus: '0,1,2,3'
 CLASS_AGNOSTIC: true
 SCALES:
 - 600
@@ -13,8 +13,8 @@ default:
   frequent: 100
   kvstore: device
 network:
-  pretrained: "/netscratch/smishra/thesis/output/fcis/v_whole_summer_winter_2020_singleclass/128/resnet_v1_101_coco_fcis_end2end_ohem/train2019/e2e"
-  pretrained_epoch: 10
+  pretrained: ""
+  pretrained_epoch: 0
   PIXEL_MEANS:
   - 91.55
   - 107.21
