@@ -1,8 +1,9 @@
-"""
-This is file is configured for training on DFKI cluster, please change the initials in the absolute path according to your
-system.
-"""
 
+#This is file is configured for training on DFKI cluster, please change the initials in the absolute path according to your
+#system.
+
+
+cd FCIS
 ## Run the file for training the FCIS, before training, one must change below files in this repo according to training:
 # 1. FCIS/experiments/fcis/cfgs/resnet_v1_101_coco_fcis_end2end_ohem.yaml
 # 2. FCIS/fcis/config/config.py
