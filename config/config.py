@@ -12,7 +12,7 @@ _data_ = 'Data'
 _raw_shape_directory = 'Raw_shape_files'
 _tif_ = 'Denmark_tif'
 _version_ = str(6)
-_version_name ='v_whole_summer_winter_2020_singleclass'
+_version_name ='v_Jul_Sep'
 _version_processed_shape_files = 'processed_shape_files' # Each version has unique files depending on category. ,
 # It must be inside version name
 _version_train_ = 'train'
@@ -23,9 +23,9 @@ _version_crop_images_ = 'cropped_images'
 train_config = {
     'train_year' : '2020',
     # change version name while training
-    'train_image_size' : 224,
+    'train_image_size' : 128,
     'instance_per_image_filter' : 2000,
-    "epochs" : 20000,
+    "epochs" : 2,
     "experiment_name" : 'resampling_factorNo',
     "experiment_value" : 0.001,  # from lvis paper
     "freeze_at" : 2,
@@ -42,7 +42,7 @@ train_config = {
     "batch_size" : 2048,
     "experiment_number" : 301,
     "checkpoint_period" : 10000,
-    "eval_period" : 5000,
+    "eval_period" : 1,
     "solver_steps" : (2000,5000,15000),
     "train_from_scratch" : False,
     "MODEL.RPN.PRE_NMS_TOPK_TRAIN" : 12000,
