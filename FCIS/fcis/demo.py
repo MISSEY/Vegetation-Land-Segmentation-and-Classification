@@ -47,8 +47,7 @@ def main():
     classes = config.ownclasses
 
     # load demo data
-    image_names = ['COCO_test2015_000000000275.jpg', 'COCO_test2015_000000001412.jpg', 'COCO_test2015_000000073428.jpg',
-                    'COCO_test2015_000000393281.jpg']
+    image_names = config.imagenames
     data = []
     for im_name in image_names:
         assert os.path.exists(cur_path + '/../demo/' + im_name), ('%s does not exist'.format('../demo/' + im_name))
