@@ -51,7 +51,7 @@ network:
   - 32
   NUM_ANCHORS: 12
 dataset:
-  NUM_CLASSES: 1
+  NUM_CLASSES: 2
   dataset: coco
   dataset_path: "/netscratch/smishra/thesis/vegetation_dataset/fcis/6/2020_processed/v_whole_summer_winter_2020/128"
   image_set: train2020

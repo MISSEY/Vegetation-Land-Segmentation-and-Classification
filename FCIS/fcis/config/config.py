@@ -171,7 +171,7 @@ config.versionnameandyear = 'whole_summer_winter_2020'
 config.image_size = '128'
 
 #demo
-config.numclasses = 1
+config.numclasses = 2
 config.ownclasses = ["agriland"]
 config.imagenames = ['COCO_val2020_whole_summer_winter_2020_singleclass_000000102308.jpg',
  'COCO_val2020_whole_summer_winter_2020_singleclass_000000102313.jpg',
