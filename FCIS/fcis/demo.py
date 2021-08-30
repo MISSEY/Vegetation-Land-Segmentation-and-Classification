@@ -43,16 +43,8 @@ def main():
     sym = sym_instance.get_symbol(config, is_train=False)
 
     # set up class names
-    num_classes = 81
-    classes = ['person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus', 'train', 'truck', 'boat',
-               'traffic light', 'fire hydrant', 'stop sign', 'parking meter', 'bench', 'bird', 'cat', 'dog', 'horse',
-               'sheep', 'cow', 'elephant', 'bear', 'zebra', 'giraffe', 'backpack', 'umbrella', 'handbag', 'tie',
-               'suitcase', 'frisbee', 'skis', 'snowboard', 'sports ball', 'kite', 'baseball bat', 'baseball glove',
-               'skateboard', 'surfboard', 'tennis racket', 'bottle', 'wine glass', 'cup', 'fork', 'knife', 'spoon',
-               'bowl', 'banana', 'apple', 'sandwich', 'orange', 'broccoli', 'carrot', 'hot dog', 'pizza', 'donut',
-               'cake', 'chair', 'couch', 'potted plant', 'bed', 'dining table', 'toilet', 'tv', 'laptop', 'mouse',
-               'remote', 'keyboard', 'cell phone', 'microwave', 'oven', 'toaster', 'sink', 'refrigerator', 'book',
-               'clock', 'vase', 'scissors', 'teddy bear', 'hair drier', 'toothbrush']
+    num_classes = config.numclasses
+    classes = config.ownclasses
 
     # load demo data
     image_names = ['COCO_test2015_000000000275.jpg', 'COCO_test2015_000000001412.jpg', 'COCO_test2015_000000073428.jpg',
@@ -75,7 +67,7 @@ def main():
     max_data_shape = [[('data', (1, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES])))]]
     provide_data = [[(k, v.shape) for k, v in zip(data_names, data[i])] for i in xrange(len(data))]
     provide_label = [None for i in xrange(len(data))]
-    arg_params, aux_params = load_param(cur_path + '/../model/fcis_coco', 0, process=True)
+    arg_params, aux_params = load_param(config.modelprefix, config.testepoch, process=True)
     predictor = Predictor(sym, data_names, label_names,
                           context=[mx.gpu(ctx_id[0])], max_data_shapes=max_data_shape,
                           provide_data=provide_data, provide_label=provide_label,
@@ -143,7 +135,8 @@ def main():
             masks[i] = masks[i][keep]
         im = cv2.imread(cur_path + '/../demo/' + im_name)
         im = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
-        show_masks(im, dets, masks, classes, config)
+        image = show_masks(im, dets, masks, classes, config,show = False)
+        cv2.imwrite(cur_path + '/../demo/_' + im_name)
 
     print 'done'
 

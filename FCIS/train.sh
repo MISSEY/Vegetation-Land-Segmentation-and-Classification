@@ -45,4 +45,18 @@ cp /home/smishra/fcis/1/Vegetation-Land-Segmentation-and-Classification/FCIS/fci
 
 
 ## Run the python script for training and testing using configuration yaml file
-python experiments/fcis/fcis_end2end_train_test.py --cfg "experiments/fcis/cfgs/resnet_v1_101_coco_fcis_end2end_ohem.yaml"
+#python experiments/fcis/fcis_end2end_train_test.py --cfg "experiments/fcis/cfgs/resnet_v1_101_coco_fcis_end2end_ohem.yaml"
+
+
+
+## For demo
+rm -rf demo
+cp -R /home/smishra/fcis/1/Vegetation-Land-Segmentation-and-Classification/FCIS/demo .
+
+rm experiments/fcis/cfgs/fcis_coco_demo.yaml
+cp /home/smishra/fcis/1/Vegetation-Land-Segmentation-and-Classification/FCIS/experiments/fcis/cfgs/fcis_coco_demo.yaml experiments/fcis/cfgs/
+
+rm fcis/demo.py
+cp /home/smishra/fcis/1/Vegetation-Land-Segmentation-and-Classification/FCIS/fcis/demo.py fcis/
+
+python ./fcis/demo.py

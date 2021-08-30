@@ -170,6 +170,68 @@ config.TEST.MASK_MERGE_THRESH = 0.5
 config.versionnameandyear = 'whole_summer_winter_2020'
 config.image_size = '128'
 
+#demo
+config.numclasses = 1
+config.ownclasses = ["agriland"]
+config.imagenames = ['COCO_val2020_whole_summer_winter_2020_singleclass_000000102308.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000102313.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000102325.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000102326.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000102327.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000109270.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000109288.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000109291.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000109307.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000109543.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000109547.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000109567.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000109583.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000109585.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000109597.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000110352.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000110360.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000110367.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000110369.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000110377.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000110384.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000110392.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000110407.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000102331.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000109594.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000111238.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000112023.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000113953.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000111241.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000111243.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000111247.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000111477.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000111495.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000111514.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000111516.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000112006.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000112009.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000112043.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000112053.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000112060.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000112061.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000113695.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000113705.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000113707.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000113950.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000113951.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000113958.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000113959.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000113976.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000113980.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000114202.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000115313.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000115322.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000115325.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000115327.jpg',
+ 'COCO_val2020_whole_summer_winter_2020_singleclass_000000115343.jpg']
+config.modelprefix ='/netscratch/smishra/thesis/output/fcis/v_whole_summer_winter_2020_singleclass/128/resnet_v1_101_coco_fcis_end2end_ohem/train2020/e2e'
+config.testepoch = 10
+
 
 def update_config(config_file):
     exp_config = None
