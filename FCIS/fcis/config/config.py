@@ -229,7 +229,7 @@ config.imagenames = ['COCO_val2020_whole_summer_winter_2020_singleclass_00000010
  'COCO_val2020_whole_summer_winter_2020_singleclass_000000115325.jpg',
  'COCO_val2020_whole_summer_winter_2020_singleclass_000000115327.jpg',
  'COCO_val2020_whole_summer_winter_2020_singleclass_000000115343.jpg']
-config.modelprefix ='/netscratch/smishra/thesis/output/fcis/v_Jan_Mar/128/resnet_v1_101_coco_fcis_end2end_ohem/train2020'
+config.modelprefix ='/netscratch/smishra/thesis/output/fcis/v_Jan_Mar/128/resnet_v1_101_coco_fcis_end2end_ohem/train2020/e2e'
 config.testepoch = 7
 
 
