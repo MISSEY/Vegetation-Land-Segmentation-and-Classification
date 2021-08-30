@@ -59,4 +59,7 @@ cp /home/smishra/fcis/1/Vegetation-Land-Segmentation-and-Classification/FCIS/exp
 rm fcis/demo.py
 cp /home/smishra/fcis/1/Vegetation-Land-Segmentation-and-Classification/FCIS/fcis/demo.py fcis/
 
+rm lib/utils/show_masks.py
+cp /home/smishra/fcis/1/Vegetation-Land-Segmentation-and-Classification/FCIS/lib/utils/show_masks.py lib/utils/
+
 python ./fcis/demo.py
