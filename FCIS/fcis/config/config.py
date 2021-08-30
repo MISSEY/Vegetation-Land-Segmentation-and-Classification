@@ -171,8 +171,8 @@ config.versionnameandyear = 'whole_summer_winter_2020'
 config.image_size = '128'
 
 #demo
-config.numclasses = 2
-config.ownclasses = ["agriland"]
+config.numclasses = 5
+config.ownclasses = ["winter","summer","other","grassland"]
 config.imagenames = ['COCO_val2020_whole_summer_winter_2020_singleclass_000000102308.jpg',
  'COCO_val2020_whole_summer_winter_2020_singleclass_000000102313.jpg',
  'COCO_val2020_whole_summer_winter_2020_singleclass_000000102325.jpg',
@@ -229,8 +229,8 @@ config.imagenames = ['COCO_val2020_whole_summer_winter_2020_singleclass_00000010
  'COCO_val2020_whole_summer_winter_2020_singleclass_000000115325.jpg',
  'COCO_val2020_whole_summer_winter_2020_singleclass_000000115327.jpg',
  'COCO_val2020_whole_summer_winter_2020_singleclass_000000115343.jpg']
-config.modelprefix ='/netscratch/smishra/thesis/output/fcis/v_whole_summer_winter_2020_singleclass/128/resnet_v1_101_coco_fcis_end2end_ohem/train2020/e2e'
-config.testepoch = 10
+config.modelprefix ='/netscratch/smishra/thesis/output/fcis/v_whole_summer_winter_2020/128/resnet_v1_101_coco_fcis_end2end_ohem/train2020/e2e'
+config.testepoch = 6
 
 
 def update_config(config_file):

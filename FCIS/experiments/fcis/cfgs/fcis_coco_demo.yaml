@@ -1,6 +1,6 @@
 ---
 MXNET_VERSION: "mxnet"
-output_path: "/netscratch/smishra/thesis/output/fcis/v_whole_summer_winter_2020_singleclass/128/demo"
+output_path: "/netscratch/smishra/thesis/output/fcis/v_whole_summer_winter_2020/128/demo"
 symbol: resnet_v1_101_fcis
 gpus: '0'
 CLASS_AGNOSTIC: true
@@ -13,7 +13,7 @@ default:
   frequent: 20
   kvstore: device
 network:
-  pretrained: "/netscratch/smishra/thesis/output/fcis/v_whole_summer_winter_2020_singleclass/128/resnet_v1_101_coco_fcis_end2end_ohem/train2020/e2e"
+  pretrained: "/netscratch/smishra/thesis/output/fcis/v_whole_summer_winter_2020/128/resnet_v1_101_coco_fcis_end2end_ohem/train2020/e2e"
   pretrained_epoch: 0
   PIXEL_MEANS:
   - 91.55
@@ -51,7 +51,7 @@ network:
   - 32
   NUM_ANCHORS: 12
 dataset:
-  NUM_CLASSES: 2
+  NUM_CLASSES: 5
   dataset: coco
   dataset_path: "/netscratch/smishra/thesis/vegetation_dataset/fcis/6/2020_processed/v_whole_summer_winter_2020/128"
   image_set: train2020
