@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------------
 
 # debug
-debug = True
+debug = False
 
 # Directories names
 _data_ = 'Data'
@@ -12,7 +12,7 @@ _data_ = 'Data'
 _raw_shape_directory = 'Raw_shape_files'
 _tif_ = 'Denmark_tif'
 _version_ = str(6)
-_version_name ='v_Jul_Sep'
+_version_name ='v_whole_summer_winter_2020_singleclass'
 _version_processed_shape_files = 'processed_shape_files' # Each version has unique files depending on category. ,
 # It must be inside version name
 _version_train_ = 'train'
@@ -65,12 +65,12 @@ fcis_model = {
 crs = "EPSG:32632"
 
 # testing
-_test_version_name = 'v_whole_summer_winter_2020'
-_test__model_ = 'output_56_800_R_50_FPN_v_whole_summer_winter_2020_resampling_factor0.01_0.001_freeze_at2'
+_test_version_name = 'v_Jul_Sep'
+_test__model_ = 'output_143_128_R_50_FPN_6_v_Jul_Sep_resampling_factor0.001_0.0001_freeze_at2'
 _test_output_image_path = 'output_image'
 test_year = '2020'
-test_image_size = 800
-test_version_ = 1
+test_image_size = 128
+test_version_ = 6
 
 # generate data
 generate_year = '2020'

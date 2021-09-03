@@ -171,8 +171,9 @@ config.versionnameandyear = 'whole_summer_winter_2020'
 config.image_size = '128'
 
 #demo
-config.numclasses = 5
-config.ownclasses = ["barley_w","wheat_w","rye_w","rapeseed_w"]
+config.numclasses = 2
+config.ownclasses = ["agriland"]
+# config.ownclasses = ["barley_w","wheat_w","rye_w","rapeseed_w"]
 config.imagenames = ['COCO_val2020_whole_summer_winter_2020_singleclass_000000102308.jpg',
  'COCO_val2020_whole_summer_winter_2020_singleclass_000000102313.jpg',
  'COCO_val2020_whole_summer_winter_2020_singleclass_000000102325.jpg',
@@ -229,8 +230,8 @@ config.imagenames = ['COCO_val2020_whole_summer_winter_2020_singleclass_00000010
  'COCO_val2020_whole_summer_winter_2020_singleclass_000000115325.jpg',
  'COCO_val2020_whole_summer_winter_2020_singleclass_000000115327.jpg',
  'COCO_val2020_whole_summer_winter_2020_singleclass_000000115343.jpg']
-config.modelprefix ='/netscratch/smishra/thesis/output/fcis/v_Jan_Mar/128/resnet_v1_101_coco_fcis_end2end_ohem/train2020/e2e'
-config.testepoch = 7
+config.modelprefix ='/media/sami02/1E4B5BB258FA2EEC/projects/Vegetation-Land-Segmentation-and-Classification/output/fcis/v_whole_summer_winter_2020_singleclass/128/resnet_v1_101_coco_fcis_end2end_ohem/train2020/e2e'
+config.testepoch = 10
 
 
 def update_config(config_file):

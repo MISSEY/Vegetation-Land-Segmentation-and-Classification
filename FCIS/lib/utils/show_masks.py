@@ -7,6 +7,8 @@
 
 import numpy as np
 import utils.image as image
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import random
 import cv2
@@ -21,8 +23,9 @@ def show_masks(im, detections, masks, class_names, cfg, scale=1.0, show = True):
     :param scale: visualize the scaled image
     :return:
     """
-    # plt.cla()
-    # plt.axis("off")
+
+    plt.cla()
+    plt.axis("off")
     # plt.imshow(im)
     for j, name in enumerate(class_names):
         if name == '__background__':
@@ -45,10 +48,11 @@ def show_masks(im, detections, masks, class_names, cfg, scale=1.0, show = True):
                 clmsk[:, :, 2] = clmsk[:, :, 2] * color[2] * 256
                 im[cod[1]:cod[3]+1, cod[0]:cod[2]+1, :] = im[cod[1]:cod[3]+1, cod[0]:cod[2]+1, :] + 0.8 * clmsk - 0.8 * mskd
             score = det[-1]
-            # plt.gca().text((bbox[2]+bbox[0])/2, bbox[1],
-            #                '{:s} {:.3f}'.format(name, score),
-            #                bbox=dict(facecolor=color, alpha=0.9), fontsize=8, color='white')
+            plt.gca().text((bbox[2]+bbox[0])/2, bbox[1],
+                           '{:s} {:.3f}'.format(name, score),
+                           bbox=dict(facecolor=color, alpha=0.9), fontsize=8, color='white')
+    plt.savefig('foo.png')
     # plt.imshow(im)
     if show:
-        plt.show()
+        # plt.show()
     return im
