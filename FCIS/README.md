@@ -5,7 +5,7 @@ This repository is copied from offcial [FCIS](https://github.com/msracver/FCIS.g
 
 ### Installation
 
-* Docker image can be found in docker hub [FCIS_MXNET](https://hub.docker.com/repository/docker/smishra03/mxnet) which already has environment to run FCIS.
+* Docker image can be found in docker hub [FCIS_MXNET](https://hub.docker.com/r/smishra03/mxnet) which already has environment to run FCIS.
 
 ### Demo
 
