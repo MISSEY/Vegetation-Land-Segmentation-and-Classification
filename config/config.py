@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------------
 
 # debug
-debug = False
+debug = True
 
 # Directories names
 _data_ = 'Data'
