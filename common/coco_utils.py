@@ -18,6 +18,7 @@ from PIL import ImageDraw as PILImageDraw
 import common.dictionary_utils as dic
 import common.coco_utils
 from matplotlib import pyplot as plt
+from shutil import copyfile
 
 from descartes import PolygonPatch
 from PIL import Image as pilimage
@@ -140,6 +141,38 @@ def format_coco(chip_dfs: Dict, chip_width: int, chip_height: int,df):
 
 
     return cocojson
+
+def modify_dataset(image_dir,annotation_json, output_image_dir,output_anno_path, required_size):
+    """
+
+    Args:
+        dataset_path:
+        output_path:
+        required_size:
+
+
+    """
+    ann = dic.load_json(annotation_json)
+    filtered_ann = ann['images'][:required_size]
+    cocojson = {
+        "info": ann['info'],
+        "licenses": ann['licenses'],
+        "categories": ann['categories']
+
+    }
+
+
+    for annotation in filtered_ann:
+        copyfile(os.path.join(
+            image_dir,
+            annotation['file_name']), os.path.join(
+            output_image_dir,
+            annotation['file_name']))
+        cocojson.setdefault('images', []).append(annotation)
+        for j in ann['annotations']:
+            if j['image_id'] == annotation['id']:
+                cocojson.setdefault('annotations', []).append(j)
+    dic.new_json(output_anno_path,cocojson)
 
 def get_categories(df):
     """
