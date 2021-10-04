@@ -132,7 +132,7 @@ def setup():
     else:
         cfg.OUTPUT_DIR = settings.check_point_output_directory
         cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = config.train_config["batch_size"]
-        cfg.SOLVER.IMS_PER_BATCH = 2
+        cfg.SOLVER.IMS_PER_BATCH = 128
 
     if config.train_config["experiment_name"] == 'resampling_factor':
         cfg.DATALOADER.SAMPLER_TRAIN = 'RepeatFactorTrainingSampler'

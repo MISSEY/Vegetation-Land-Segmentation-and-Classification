@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------------
 
 # debug
-debug = True
+debug = False
 
 # Directories names
 _data_ = 'Data'
@@ -25,7 +25,7 @@ train_config = {
     # change version name while training
     'train_image_size' : 128,
     'instance_per_image_filter' : 2000,
-    "epochs" : 2,
+    "epochs" : 2000,
     "experiment_name" : 'resampling_factorNo',
     "experiment_value" : 0.001,  # from lvis paper
     "freeze_at" : 2,
@@ -39,15 +39,15 @@ train_config = {
     "backbone_name" : 'build_resnet_fpn_backbone', # build_resnet_fpn_backbone (default) # build_resnet_backbone_custom
     "architecture_name" : "GeneralizedRCNN",  # for FCIS implementation (default) #GeneralizedRCNN,    GeneralizedFCIS
     "config_file" : "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml", # mask_rcnn_X_101_32x8d_FPN_3x , mask_rcnn_R_101_FPN_3x , mask_rcnn_R_50_FPN_3x
-    "batch_size" : 2048,
-    "experiment_number" : 301,
+    "batch_size" : 512,
+    "experiment_number" : 401,
     "checkpoint_period" : 10000,
     "eval_period" : 1,
     "solver_steps" : (2000,5000,15000),
     "train_from_scratch" : False,
     "MODEL.RPN.PRE_NMS_TOPK_TRAIN" : 12000,
     "MODEL.RPN.PRE_NMS_TOPK_TEST" : 6000,
-    "SOLVER.WARMUP_ITERS" : 4000
+    "SOLVER.WARMUP_ITERS" : 1000
 }
 fcis_model = {
     'flag':False,
